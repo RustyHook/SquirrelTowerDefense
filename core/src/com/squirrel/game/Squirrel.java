@@ -35,4 +35,12 @@ public class Squirrel extends Enemy {
 	public Squirrel(int x, int y, Array<Vector2> path) {
 		super(new Sprite(new Texture(IMAGE)), x, y, HEALTH, SPEED, REWARD, path);
 	}
+	
+	public String toString() {
+		String out = "";
+		out += "\nSquirrel: " + super.toString();
+		
+		
+		return out;
+	}
 }

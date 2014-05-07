@@ -58,7 +58,7 @@ public abstract class Enemy extends Sprite implements Movable {
 		
 		//Get the path ready to be traveled
 		setPath(path);
-		next = path.pop();
+		next = path.peek();
 		reachedGoal = false;
 	}
 	
@@ -172,6 +172,13 @@ public abstract class Enemy extends Sprite implements Movable {
 	 */
 	public void setReward(int reward) {
 		this.reward = reward;
+	}
+	
+	public String toString() {
+		String out = "";
+		out += "\nPath- "+path.toString();
+		
+		return out;
 	}
 	
 }

@@ -6,6 +6,7 @@
 
 package com.squirrel.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -13,7 +14,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 
-public class Wave {
+public abstract class Wave {
 	static final long spawnTimer = 1000000000;
 	
 	private Array<Enemy> enemies;
@@ -38,7 +39,6 @@ public class Wave {
 	 */
 	public Wave (TiledMapTileLayer mapLayer, String message, int woodReward,
 			int stoneReward, Vector2 spawn, Vector2 goal) {
-		
 		this.message = message;
 		this.woodReward = woodReward;
 		this.stoneReward = stoneReward;
@@ -50,11 +50,19 @@ public class Wave {
 	}
 	
 	
+	/**
+	 * Draws each enemy in the wave or gets rid of it if it has
+	 * reached its goal or is dead. Also spawns new enemies.
+	 * @param batch The Batch all of the enemies will draw to
+	 */
 	public void draw(Batch batch) {
+		
+		//Spawn new enemy if the right time has passed
 		if (TimeUtils.nanoTime() - lastSpawnTime > spawnTimer) {
 			spawnNewEnemy();
 		}
 		
+		//Draw spawned enemies and remove ones that are done
 		for (int i = 0; i < spawnedEnemies.size; i++) {
 			if (spawnedEnemies.get(i).isDead() || 
 					spawnedEnemies.get(i).hasReachedGoal()) {
@@ -65,13 +73,26 @@ public class Wave {
 		}
 	}
 	
-	public void spawnNewEnemy() {
+	/**
+	 * Spawns a new enemy and adds it to the wave
+	 */
+	private void spawnNewEnemy() {
 		if (!(enemies.size < 1))
 			spawnedEnemies.add(enemies.pop());
 		lastSpawnTime = TimeUtils.nanoTime();
 	}
 	
-	public void setEnemies(Array<Enemy> enemies) {
+	/**
+	 * This method should create the enemies for the wave
+	 * and the set them using setEnemies. 
+	 */
+	protected abstract void createEnemies();
+	
+	/**
+	 * This method sets the enemies in the wave
+	 * @param enemy
+	 */
+	protected void setEnemies(Array<Enemy> enemies) {
 		this.enemies = enemies;
 	}
 	

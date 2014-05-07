@@ -58,6 +58,7 @@ public class SquirrelDefenseGame extends ApplicationAdapter {
 	
 	WaveOne wave;
 	Array<Wave> waves;
+	Array<Trap> traps;
 	
 	@Override
 	public void create () {
@@ -92,7 +93,7 @@ public class SquirrelDefenseGame extends ApplicationAdapter {
 		renderer.setView(camera);
 		
 		waves = new Array<Wave>();
-
+		traps = new Array<Trap>();
 	}
 
 	@Override
@@ -117,14 +118,19 @@ public class SquirrelDefenseGame extends ApplicationAdapter {
 			s.draw(renderer.getSpriteBatch());
 		}
 		
-		for (Tower t : towers) {
+//		for (Tower t : towers) {
+//			t.draw(renderer.getSpriteBatch());
+//			t.updatePossibleTargets(squirrels);
+//		}
+		
+		for (Trap t : traps) {
 			t.draw(renderer.getSpriteBatch());
-			t.updatePossibleTargets(squirrels);
+			t.updateEnemies(squirrels);
 		}
 		
 		for (Wave w : waves)
 			w.draw(renderer.getSpriteBatch());
-		
+
 		renderer.getSpriteBatch().end();
 		/*
 		 * RENDERING ENDED
@@ -132,7 +138,7 @@ public class SquirrelDefenseGame extends ApplicationAdapter {
 		
 		//Create a stick where the user touches
 		if (Gdx.input.isTouched()) {
-			spawnTower();
+			spawnTrap();
 		}
 		
 		//Uncomment to spawn a squirrel every few seconds
@@ -140,7 +146,7 @@ public class SquirrelDefenseGame extends ApplicationAdapter {
 //			spawnSquirrel();
 //		}
 		
-		//test wave if C is pressed
+		//test wave if W is pressed
 		if (Gdx.input.isKeyPressed(Keys.W)) {
 			spawnWave();
 		}
@@ -153,6 +159,13 @@ public class SquirrelDefenseGame extends ApplicationAdapter {
 		for (int i = 0; i < squirrels.size; i++) {
 			if (squirrels.get(i).hasReachedGoal() || squirrels.get(i).isDead()) {
 				squirrels.removeIndex(i);
+			}
+		}
+		
+		//remove destroyed traps
+		for (int i = 0; i < traps.size; i++) {
+			if (traps.get(i).isDestroyed()) {
+				traps.removeIndex(i);
 			}
 		}
 	}
@@ -189,6 +202,38 @@ public class SquirrelDefenseGame extends ApplicationAdapter {
 		waves.add(new WaveOne((TiledMapTileLayer) map.getLayers().get(0),
 				new Vector2(convertCoordinate(SPAWN_X), convertCoordinate(SPAWN_Y)), 
 				new Vector2(convertCoordinate(GOAL_X), convertCoordinate(GOAL_Y))));
+	}
+	
+	private void spawnTrap() {
+		Rectangle stick = new Rectangle();
+		Vector3 touchPos = new Vector3();
+		
+		//Get the spot the user touched
+		touchPos.set(Gdx.input.getX(), Gdx.input.getY(), 0);
+		
+		//Convert the units to our camera units
+		camera.unproject(touchPos);
+		
+		//Set in middle of tile
+		stick.x = touchPos.x - TILE_SIZE / 2;
+		stick.y = touchPos.y - TILE_SIZE / 2;
+		
+		TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(0);
+		Cell cell = layer.getCell(convertCoordinate(stick.x), convertCoordinate(stick.y));
+		
+		//If there is not already a something there
+		if (cell == null) {
+			//Create new wall and put it at that spot
+			Cell newCell = new Cell();
+			StaticTiledMapTile newTile = new StaticTiledMapTile(new TextureRegion(stickImage, TILE_SIZE, TILE_SIZE));
+//			newTile.getProperties().put("blocked", true);
+			newCell.setTile(newTile);
+			layer.setCell(convertCoordinate(stick.x), convertCoordinate(stick.y), newCell);
+		}
+		
+		float trapX = convertCoordinate(stick.x)*TILE_SIZE;
+		float trapY = convertCoordinate(stick.y)*TILE_SIZE;
+		traps.add(new StickTrap(trapX, trapY, squirrels));
 	}
 	
 	/**
