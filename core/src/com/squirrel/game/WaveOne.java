@@ -12,7 +12,7 @@ import com.badlogic.gdx.utils.Array;
 
 public class WaveOne extends Wave {
 	//Change these for balancing
-	static final int NUM_OF_SQUIRRELS = 20;
+	static final int NUM_OF_SQUIRRELS = 10;
 	static final int WOOD_REWARD = 100;
 	static final int STONE_REWARD = 10;
 	static final String MESSAGE = "Wave 1: "+NUM_OF_SQUIRRELS+" squirrels with"+Squirrel.HEALTH + " health";

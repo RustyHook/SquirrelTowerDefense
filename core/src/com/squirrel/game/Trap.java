@@ -52,8 +52,8 @@ public abstract class Trap extends Structure {
 	}
 	
 	protected boolean isInTrap(Enemy enemy) {
-		return Math.abs(enemy.getX() - (getX()+ ScreenInfo.TILE_SIZE / 2)) < 5 ||
-				Math.abs(enemy.getY() - (getY()+ ScreenInfo.TILE_SIZE / 2)) < 5;
+		return (Math.abs(enemy.getX() - getX()) < 3 &&
+				Math.abs(enemy.getY() - getY()) < 3);
 		
 	}
 	

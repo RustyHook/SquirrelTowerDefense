@@ -11,7 +11,7 @@ public class StickTrap extends Trap {
 	//Change these for balancing
 	static final float DAMAGE = 10f;
 	static final int COST = 2;
-	static final FileHandle TRAP_IMAGE = Gdx.files.internal("stick.gif");
+	static final FileHandle TRAP_IMAGE = Gdx.files.internal("Trap.png");
 	
 	public StickTrap(float x, float y, Array<Enemy> enemies) {
 		super(new Sprite(new Texture(TRAP_IMAGE)), x, y, COST, enemies);

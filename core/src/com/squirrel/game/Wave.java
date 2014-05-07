@@ -96,6 +96,10 @@ public abstract class Wave {
 		this.enemies = enemies;
 	}
 	
+	public Array<Enemy> getEnemies() {
+		return enemies;
+	}
+	
 	/**
 	 * @return the message
 	 */

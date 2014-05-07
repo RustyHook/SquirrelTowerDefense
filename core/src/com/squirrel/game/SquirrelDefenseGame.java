@@ -2,7 +2,13 @@
  * This is the main game screen for Squirrel Defense. All of the 
  * game's main logic should be put into the render function here.
  */
-
+/*
+ * 
+ * CURRENTLY JUST BEING USED FOR TESTING. WILL CHANGE A LOT
+ * 
+ *
+ * 
+ */
 package com.squirrel.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
@@ -59,6 +65,7 @@ public class SquirrelDefenseGame extends ApplicationAdapter {
 	WaveOne wave;
 	Array<Wave> waves;
 	Array<Trap> traps;
+	Texture trapImage;
 	
 	@Override
 	public void create () {
@@ -70,6 +77,7 @@ public class SquirrelDefenseGame extends ApplicationAdapter {
 		wallImage = new Texture(Gdx.files.internal("wall.png"));
 		towerImage = new Texture(Gdx.files.internal("Tower.png"));
 		projectileImage = new Texture(Gdx.files.internal("Projectile.png"));
+		trapImage = new Texture(Gdx.files.internal("Trap.png"));
 		//Setup camera, will be static for this game
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, WIDTH, HEIGHT);
@@ -118,28 +126,28 @@ public class SquirrelDefenseGame extends ApplicationAdapter {
 			s.draw(renderer.getSpriteBatch());
 		}
 		
-//		for (Tower t : towers) {
-//			t.draw(renderer.getSpriteBatch());
-//			t.updatePossibleTargets(squirrels);
-//		}
+		for (Tower t : towers) {
+			t.draw(renderer.getSpriteBatch());
+			t.updatePossibleTargets(squirrels);
+		}
 		
 		for (Trap t : traps) {
 			t.draw(renderer.getSpriteBatch());
 			t.updateEnemies(squirrels);
 		}
 		
-		for (Wave w : waves)
+		for (Wave w : waves) {
 			w.draw(renderer.getSpriteBatch());
-
+		}
 		renderer.getSpriteBatch().end();
 		/*
 		 * RENDERING ENDED
 		 */
 		
 		//Create a stick where the user touches
-		if (Gdx.input.isTouched()) {
-			spawnTrap();
-		}
+//		if (Gdx.input.isTouched()) {
+//			spawnTrap();
+//		}
 		
 		//Uncomment to spawn a squirrel every few seconds
 //		if (TimeUtils.nanoTime() - lastSpawnTime > 1000000000) {
@@ -154,6 +162,14 @@ public class SquirrelDefenseGame extends ApplicationAdapter {
 		if (Gdx.input.isKeyPressed(Keys.A)) {
 			spawnSquirrel();
 		}
+		//test tower if t is pressed
+		if (Gdx.input.isKeyPressed(Keys.T)) {
+			spawnTower();
+		}
+		//test trap if R is pressed
+		if (Gdx.input.isKeyPressed(Keys.R)) {
+			spawnTrap();
+		}
 		
 		//Remove squirrels that have reached the goal
 		for (int i = 0; i < squirrels.size; i++) {
@@ -165,6 +181,8 @@ public class SquirrelDefenseGame extends ApplicationAdapter {
 		//remove destroyed traps
 		for (int i = 0; i < traps.size; i++) {
 			if (traps.get(i).isDestroyed()) {
+				((TiledMapTileLayer) map.getLayers().get(0)).setCell(ScreenInfo.toMapCoordinate(traps.get(i).getX()),
+						ScreenInfo.toMapCoordinate(traps.get(i).getY()), null);
 				traps.removeIndex(i);
 			}
 		}
@@ -225,8 +243,7 @@ public class SquirrelDefenseGame extends ApplicationAdapter {
 		if (cell == null) {
 			//Create new wall and put it at that spot
 			Cell newCell = new Cell();
-			StaticTiledMapTile newTile = new StaticTiledMapTile(new TextureRegion(stickImage, TILE_SIZE, TILE_SIZE));
-//			newTile.getProperties().put("blocked", true);
+			StaticTiledMapTile newTile = new StaticTiledMapTile(new TextureRegion(trapImage, TILE_SIZE, TILE_SIZE));
 			newCell.setTile(newTile);
 			layer.setCell(convertCoordinate(stick.x), convertCoordinate(stick.y), newCell);
 		}
