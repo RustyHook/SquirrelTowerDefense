@@ -25,7 +25,7 @@ public abstract class Enemy extends Sprite implements Movable {
 	
 	//Don't change these 
 	private Vector2 velocity;
-	public Stack<Vector2> path;
+	private Stack<Vector2> path;
 	private Vector2 next;
 	private boolean reachedGoal;
 	private boolean dead;

@@ -7,7 +7,7 @@ import com.badlogic.gdx.utils.Array;
 
 public class WaveOne extends Wave {
 	//Change these for balancing
-	static final int NUM_OF_SQUIRRELS = 11;
+	static final int NUM_OF_SQUIRRELS = 8;
 	static final int WOOD_REWARD = 100;
 	static final int STONE_REWARD = 10;
 	static final String MESSAGE = "Wave 1: "+NUM_OF_SQUIRRELS+" squirrels with"+Squirrel.HEALTH + " health";
@@ -26,12 +26,6 @@ public class WaveOne extends Wave {
 		for (int i = 0; i < NUM_OF_SQUIRRELS; i++) {
 			enemies.add(new Squirrel((int) getSpawn().x*ScreenInfo.TILE_SIZE, 
 					(int) getSpawn().y*ScreenInfo.TILE_SIZE, getPath()));
-		}
-		
-		for (Enemy e : enemies) {
-			for (Vector2 v : e.path) {
-				Gdx.app.log("Path vector: ", v.toString());
-			}
 		}
 		
 		setEnemies(enemies);

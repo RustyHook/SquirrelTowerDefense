@@ -92,10 +92,7 @@ public class SquirrelDefenseGame extends ApplicationAdapter {
 		renderer.setView(camera);
 		
 		waves = new Array<Wave>();
-		
-		wave = new WaveOne((TiledMapTileLayer) map.getLayers().get(0),
-				new Vector2(convertCoordinate(SPAWN_X), convertCoordinate(SPAWN_Y)), 
-				new Vector2(convertCoordinate(GOAL_X), convertCoordinate(GOAL_Y)));
+
 	}
 
 	@Override
@@ -116,9 +113,9 @@ public class SquirrelDefenseGame extends ApplicationAdapter {
 		 */
 		renderer.getSpriteBatch().begin();
 		
-//		for (Enemy s : squirrels) {
-//			s.draw(renderer.getSpriteBatch());
-//		}
+		for (Enemy s : squirrels) {
+			s.draw(renderer.getSpriteBatch());
+		}
 		
 		for (Tower t : towers) {
 			t.draw(renderer.getSpriteBatch());
@@ -128,7 +125,6 @@ public class SquirrelDefenseGame extends ApplicationAdapter {
 		for (Wave w : waves)
 			w.draw(renderer.getSpriteBatch());
 		
-//		wave.draw(renderer.getSpriteBatch());
 		renderer.getSpriteBatch().end();
 		/*
 		 * RENDERING ENDED
