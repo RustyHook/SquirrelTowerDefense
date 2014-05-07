@@ -25,7 +25,7 @@ public abstract class Enemy extends Sprite implements Movable {
 	
 	//Don't change these 
 	private Vector2 velocity;
-	private Stack<Vector2> path;
+	public Stack<Vector2> path;
 	private Vector2 next;
 	private boolean reachedGoal;
 	private boolean dead;
@@ -173,5 +173,6 @@ public abstract class Enemy extends Sprite implements Movable {
 	public void setReward(int reward) {
 		this.reward = reward;
 	}
+	
 }
 

@@ -29,19 +29,18 @@ public class PathFinder {
 	 * the tiles found in the specified layer of a map. Tiles that 
 	 * cannot be traveled through should have a property titled
 	 * "blocked".
-	 * @param map Map to turn into a graph
+	 * @param mapLayer Layer of a map that contains the tiles
 	 * @param layerNumber The layer that specifies which tiles can
 	 * be traveled across by giving tiles the property "blocked".
 	 */
-	public PathFinder(TiledMap map, int layerNumber) {
-		TiledMapTileLayer layer = (TiledMapTileLayer) map.getLayers().get(layerNumber);
-		height = layer.getHeight();
-		width = layer.getWidth();
-		createNodes(layer);
+	public PathFinder(TiledMapTileLayer mapLayer) {
+		height = mapLayer.getHeight();
+		width = mapLayer.getWidth();
+		createNodes(mapLayer);
 		
-		//Log for testing
-		Gdx.app.log("height: ", ((Integer) layer.getHeight()).toString());
-		Gdx.app.log("width: ", ((Integer) layer.getWidth()).toString());
+//		//Log for testing
+//		Gdx.app.log("height: ", ((Integer) layer.getHeight()).toString());
+//		Gdx.app.log("width: ", ((Integer) layer.getWidth()).toString());
 	}
 	
 	/**
@@ -253,13 +252,13 @@ public class PathFinder {
 		}
 		
 		//log for testing
-		for (Vector2 v : finalNodePath) {
-			Gdx.app.log("NodePath: ", (v).toString());
-		}
-		
-		for (Vector2 v : finalPath) {
-			Gdx.app.log("Path: ", (v).toString());
-		}
+//		for (Vector2 v : finalNodePath) {
+//			Gdx.app.log("NodePath: ", (v).toString());
+//		}
+//		
+//		for (Vector2 v : finalPath) {
+//			Gdx.app.log("Path: ", (v).toString());
+//		}
 		
 		//Reset for future path finds
 		reset();
@@ -279,10 +278,10 @@ public class PathFinder {
 		openSet = new ArrayList<Node>();
 		
 		//Log for testing
-		Gdx.app.log("Start pos x: ", ((Float) startPosition.x).toString());
-		Gdx.app.log("Start pos y: ", ((Float) startPosition.y).toString());
-		Gdx.app.log("Goal pos x: ", ((Float) goalPosition.x).toString());
-		Gdx.app.log("Goal pos y: ", ((Float) goalPosition.y).toString());
+//		Gdx.app.log("Start pos x: ", ((Float) startPosition.x).toString());
+//		Gdx.app.log("Start pos y: ", ((Float) startPosition.y).toString());
+//		Gdx.app.log("Goal pos x: ", ((Float) goalPosition.x).toString());
+//		Gdx.app.log("Goal pos y: ", ((Float) goalPosition.y).toString());
 		
 		Node start = nodeGraph[(int) startPosition.x][(int) startPosition.y];
 		Node goal = nodeGraph[(int) goalPosition.x][(int) goalPosition.y];

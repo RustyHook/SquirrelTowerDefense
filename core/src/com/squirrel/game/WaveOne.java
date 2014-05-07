@@ -1,32 +1,39 @@
 package com.squirrel.game;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
 public class WaveOne extends Wave {
 	//Change these for balancing
-	static final int NUM_OF_SQUIRRELS = 10;
+	static final int NUM_OF_SQUIRRELS = 11;
 	static final int WOOD_REWARD = 100;
 	static final int STONE_REWARD = 10;
 	static final String MESSAGE = "Wave 1: "+NUM_OF_SQUIRRELS+" squirrels with"+Squirrel.HEALTH + " health";
 	
-	private Vector2 spawn;
-	private Vector2 goal;
-	
-	public WaveOne(Vector2 spawn, Vector2 goal) {
-		super(MESSAGE, WOOD_REWARD, STONE_REWARD, spawn, goal);
-		
-		this.spawn = spawn;
-		this.goal = goal;
-		
-		setEnemies();
+	public WaveOne(TiledMapTileLayer mapLayer, Vector2 spawn, Vector2 goal) {
+		super(mapLayer, MESSAGE, WOOD_REWARD, STONE_REWARD, spawn, goal);
+		createEnemies();
 	}
 	
-	public void setEnemies() {
+	public void createEnemies() {
 		Array<Enemy> enemies = new Array<Enemy>();
 		
+		//Log for testing
+		Gdx.app.log("Spawn: ", getSpawn().toString());
+		
 		for (int i = 0; i < NUM_OF_SQUIRRELS; i++) {
-			enemies.add(new Squirrel(spawn.x, spawn.y));
+			enemies.add(new Squirrel((int) getSpawn().x*ScreenInfo.TILE_SIZE, 
+					(int) getSpawn().y*ScreenInfo.TILE_SIZE, getPath()));
 		}
+		
+		for (Enemy e : enemies) {
+			for (Vector2 v : e.path) {
+				Gdx.app.log("Path vector: ", v.toString());
+			}
+		}
+		
+		setEnemies(enemies);
 	}
 }

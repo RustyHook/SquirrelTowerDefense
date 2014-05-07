@@ -56,6 +56,9 @@ public class SquirrelDefenseGame extends ApplicationAdapter {
 	PathFinder pathFinder;
 	private long lastSpawnTime;
 	
+	WaveOne wave;
+	Array<Wave> waves;
+	
 	@Override
 	public void create () {
 		batch = new SpriteBatch();
@@ -79,7 +82,7 @@ public class SquirrelDefenseGame extends ApplicationAdapter {
 		
 		//The map layer that will hold created objects and detect collisions
 		map.getLayers().add(new TiledMapTileLayer(WIDTH/TILE_SIZE, HEIGHT/TILE_SIZE, TILE_SIZE, TILE_SIZE));
-		pathFinder = new PathFinder(map, 0);
+		pathFinder = new PathFinder((TiledMapTileLayer) map.getLayers().get(0));
 		
 		//Spawn a test squirrel
 		spawnSquirrel();
@@ -87,6 +90,12 @@ public class SquirrelDefenseGame extends ApplicationAdapter {
 		//Setup the renderer
 		renderer = new OrthogonalTiledMapRenderer(map);
 		renderer.setView(camera);
+		
+		waves = new Array<Wave>();
+		
+		wave = new WaveOne((TiledMapTileLayer) map.getLayers().get(0),
+				new Vector2(convertCoordinate(SPAWN_X), convertCoordinate(SPAWN_Y)), 
+				new Vector2(convertCoordinate(GOAL_X), convertCoordinate(GOAL_Y)));
 	}
 
 	@Override
@@ -107,15 +116,19 @@ public class SquirrelDefenseGame extends ApplicationAdapter {
 		 */
 		renderer.getSpriteBatch().begin();
 		
-		for (Enemy s : squirrels) {
-			s.draw(renderer.getSpriteBatch());
-		}
+//		for (Enemy s : squirrels) {
+//			s.draw(renderer.getSpriteBatch());
+//		}
 		
 		for (Tower t : towers) {
 			t.draw(renderer.getSpriteBatch());
 			t.updatePossibleTargets(squirrels);
 		}
 		
+		for (Wave w : waves)
+			w.draw(renderer.getSpriteBatch());
+		
+//		wave.draw(renderer.getSpriteBatch());
 		renderer.getSpriteBatch().end();
 		/*
 		 * RENDERING ENDED
@@ -131,7 +144,10 @@ public class SquirrelDefenseGame extends ApplicationAdapter {
 //			spawnSquirrel();
 //		}
 		
-		
+		//test wave if C is pressed
+		if (Gdx.input.isKeyPressed(Keys.W)) {
+			spawnWave();
+		}
 		//Spawn a squirrel when A is pressed
 		if (Gdx.input.isKeyPressed(Keys.A)) {
 			spawnSquirrel();
@@ -161,7 +177,7 @@ public class SquirrelDefenseGame extends ApplicationAdapter {
 		Array<Vector2> path = new Array<Vector2>();
 		
 		//Update path finder with the updated map
-		pathFinder = new PathFinder(map, 0);
+		pathFinder = new PathFinder((TiledMapTileLayer) map.getLayers().get(0));
 		
 		//Find shortest path from Spawn to Goal.
 		path = pathFinder.findShortestPath(
@@ -171,6 +187,12 @@ public class SquirrelDefenseGame extends ApplicationAdapter {
 		
 		squirrels.add(newSquirrel);
 		lastSpawnTime = TimeUtils.nanoTime();
+	}
+	
+	private void spawnWave() {
+		waves.add(new WaveOne((TiledMapTileLayer) map.getLayers().get(0),
+				new Vector2(convertCoordinate(SPAWN_X), convertCoordinate(SPAWN_Y)), 
+				new Vector2(convertCoordinate(GOAL_X), convertCoordinate(GOAL_Y))));
 	}
 	
 	/**
