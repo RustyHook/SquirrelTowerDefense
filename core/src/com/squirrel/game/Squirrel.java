@@ -2,6 +2,8 @@
  * This class represents a basic squirrel that is an enemy
  * 
  * @author Jacob Rust
+ *
+ * VINCENT WAS HERE -- 05.06
  */
 
 package com.squirrel.game;
