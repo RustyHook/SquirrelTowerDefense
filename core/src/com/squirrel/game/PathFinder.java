@@ -245,9 +245,9 @@ public class PathFinder {
 		for (int i = 0; i < finalNodePath.size; i++) {
 			temp = new Vector2();
 			temp.x = finalNodePath.get(i).x * 
-					SquirrelDefenseGame.TILE_SIZE;
+					ScreenInfo.TILE_SIZE;
 			temp.y = finalNodePath.get(i).y * 
-					SquirrelDefenseGame.TILE_SIZE;
+					ScreenInfo.TILE_SIZE;
 			finalPath.add(temp);
 		}
 		
