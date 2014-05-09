@@ -1,7 +1,5 @@
 /**
  * A bare bones start menu, must change
- * 
- * VINCENT LIU WAS HERE
  */
 package com.squirrel.game;
 
@@ -49,7 +47,10 @@ public class StartMenuScreen implements Screen {
 	    
 	    //Create button with style and add it to the stage!
 	    Button button = new Button(style);
+	    button.setX(stage.getWidth()/2);
+	    button.setY(stage.getHeight()/2);
 	    stage.addActor(button);
+	
 	    
 	    //Give the button a listener!
 	    button.addListener(new ClickListener() {
