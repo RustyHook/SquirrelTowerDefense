@@ -36,10 +36,14 @@ import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.badlogic.gdx.utils.viewport.Viewport;
@@ -83,7 +87,10 @@ public class GameScreen implements Screen {
 	private Sprite mapSprite;
 	
 	SelectBox<String> towerSelect;
-	String[] towerList = {"Stick Tower", "SomeTowerWithALongName"};
+	TextButton doneButton;
+	String[] towerList = {"Stick Tower", "SomeTowerWithALongName", "Max His Master's"};
+	boolean towerSelectVisible = true;
+	int resources = 100;
 	
 	
 	
@@ -106,11 +113,31 @@ public class GameScreen implements Screen {
 	   // towerSelect.setY(200);
 	    towerSelect.sizeBy(200, 10);
 	    
+	    //Creates the "Done" button
+	    doneButton = new TextButton("Done", skin);
+	    doneButton.addListener(new ClickListener() {
+	    	public void clicked(InputEvent event, float x, float y) {
+	    		resources += 100;
+	    		if(towerSelectVisible){
+	    			towerSelect.setVisible(false);
+	    			towerSelectVisible = false;
+	    		}
+	    		else{
+	    			towerSelect.setVisible(true);
+	    			towerSelectVisible = true;
+	    		}
+	    	}
+	    });
+	    doneButton.sizeBy(20, 20);
+	    doneButton.setX(stage.getWidth()-doneButton.getWidth());
+	    
 	    
 	    Table table = new Table();
 	    table.setFillParent(true);
 	    stage.addActor(table);
 	    table.addActor(towerSelect);
+	    table.addActor(doneButton);
+	    
 		
 
 		//Create textures for the images 
@@ -395,17 +422,57 @@ public class GameScreen implements Screen {
 		
 		//If there is not already a something there
 		if (cell == null || !(cell.getTile().getProperties().containsKey("blocked"))) {
-			//Create new wall and put it at that spot
+			
+			/* ORIGINAL CODE BY JACOB RUST -- Put into the if statements below as you don't want free walls due to the resource system.
 			Cell newCell = new Cell();
-			TextureRegion region = new TextureRegion(towerImage, TILE_SIZE, TILE_SIZE);
+			TextureRegion region = new TextureRegion(new Texture("Tower.png"));
 			StaticTiledMapTile newTile = new StaticTiledMapTile(region);
 			newTile.getProperties().put("blocked", true);
 			newCell.setTile(newTile);
 			layer.setCell(convertCoordinate(stick.x), convertCoordinate(stick.y), newCell);
-			
 			float towerX = convertCoordinate(stick.x)*TILE_SIZE;
 			float towerY = convertCoordinate(stick.y)*TILE_SIZE;
-			towers.add(new StickTower(towerX, towerY, squirrels));
+			*/
+		
+			String towerType = towerSelect.getSelection().toString();
+			towerType = towerType.substring(1, towerType.length()-1);
+			//System.out.println(towerType);
+			
+			//Adds the selected tower if you can afford it.
+			if(towerType.equals("Stick Tower")){
+				if(resources - 10 >= 0){
+					//Create new wall and put it at that spot
+					Cell newCell = new Cell();
+					TextureRegion region = new TextureRegion(new Texture("Tower.png"));
+					StaticTiledMapTile newTile = new StaticTiledMapTile(region);
+					newTile.getProperties().put("blocked", true);
+					newCell.setTile(newTile);
+					layer.setCell(convertCoordinate(stick.x), convertCoordinate(stick.y), newCell);
+					
+					float towerX = convertCoordinate(stick.x)*TILE_SIZE;
+					float towerY = convertCoordinate(stick.y)*TILE_SIZE;
+					
+					towers.add(new StickTower(towerX, towerY, squirrels));
+					resources = resources - 10;
+				}
+			}
+			else if(towerType.equals("Max His Master's")){
+				if(resources - 100 >= 0){
+					//Create new wall and put it at that spot
+					Cell newCell = new Cell();
+					TextureRegion region = new TextureRegion(new Texture("MaxTower.png"));
+					StaticTiledMapTile newTile = new StaticTiledMapTile(region);
+					newTile.getProperties().put("blocked", true);
+					newCell.setTile(newTile);
+					layer.setCell(convertCoordinate(stick.x), convertCoordinate(stick.y), newCell);
+					
+					float towerX = convertCoordinate(stick.x)*TILE_SIZE;
+					float towerY = convertCoordinate(stick.y)*TILE_SIZE;			
+					
+					towers.add(new MaxTower(towerX, towerY, squirrels));
+					resources = resources - 100;
+				}
+			}
 		}	
 	}
 	
