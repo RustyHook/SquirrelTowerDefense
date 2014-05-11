@@ -3,6 +3,8 @@
  */
 package com.squirrel.game;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -13,9 +15,12 @@ import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.utils.Selection;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
 
 public class StartMenuScreen implements Screen {
@@ -47,10 +52,25 @@ public class StartMenuScreen implements Screen {
 	    
 	    //Create button with style and add it to the stage!
 	    Button button = new Button(style);
-	    button.setX(stage.getWidth()/2);
+	    button.setX(stage.getWidth()/2);	//Centers the button
 	    button.setY(stage.getHeight()/2);
 	    stage.addActor(button);
-	
+	    
+	    
+	    //Creates a SelectBox that displays the Array.
+	    String[] array = new String[3];
+	    array[0] = "ZERO";
+	    array[1] = "ONE";
+	    array[2] = "TWO";
+	    
+	    Skin skin = new Skin(Gdx.files.internal("defaultskin.json"));
+
+	    SelectBox<String> selectBox = new SelectBox<String>(skin);
+	    selectBox.setX(200);
+	    selectBox.setY(200);
+	    selectBox.setItems(array);
+	    selectBox.sizeBy(50);
+	    stage.addActor(selectBox);
 	    
 	    //Give the button a listener!
 	    button.addListener(new ClickListener() {
