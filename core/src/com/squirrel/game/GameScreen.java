@@ -20,6 +20,7 @@ import com.badlogic.gdx.assets.loaders.resolvers.ExternalFileHandleResolver;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -36,8 +37,12 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
+import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class GameScreen implements Screen {
 	//The rest of the game scales off these variables
@@ -77,15 +82,37 @@ public class GameScreen implements Screen {
 	Texture mapImage;
 	private Sprite mapSprite;
 	
+	SelectBox<String> towerSelect;
+	String[] towerList = {"Stick Tower", "SomeTowerWithALongName"};
+	
+	
+	
 	public GameScreen(Game game) {
 		this.game = game;
 		show();
 	}
-	
+
 	@Override
 	public void show () {
+		stage = new Stage();
+		Gdx.input.setInputProcessor(stage);
 		batch = new SpriteBatch();
 		
+		//Creates the SelectBox for Tower Selection
+		Skin skin = new Skin(Gdx.files.internal("defaultskin.json"));
+		towerSelect = new SelectBox<String>(skin);
+	    towerSelect.setItems(towerList);
+	    //towerSelect.setX(200);	// USE TO CHANGE THE LOCATION OF THE SELECT BOX
+	   // towerSelect.setY(200);
+	    towerSelect.sizeBy(200, 10);
+	    
+	    
+	    Table table = new Table();
+	    table.setFillParent(true);
+	    stage.addActor(table);
+	    table.addActor(towerSelect);
+		
+
 		//Create textures for the images 
 		squirrelImage = new Texture(Gdx.files.internal("squirrel.png"));
 		stickImage = new Texture(Gdx.files.internal("stick.gif"));
@@ -94,6 +121,7 @@ public class GameScreen implements Screen {
 		projectileImage = new Texture(Gdx.files.internal("Projectile.png"));
 		trapImage = new Texture(Gdx.files.internal("Trap.png"));
 //		mapImage = new Texture(Gdx.files.internal("level1final.png"));
+		
 		
 		//Setup camera, will be static for this game
 		camera = new OrthographicCamera();
@@ -122,7 +150,8 @@ public class GameScreen implements Screen {
 		//Setup the renderer
 		renderer = new OrthogonalTiledMapRenderer(map);
 		renderer.setView(camera);
-		
+	
+
 	}
 
 	@Override
@@ -143,6 +172,7 @@ public class GameScreen implements Screen {
 		 */
 		renderer.getSpriteBatch().begin();
 //		mapSprite.draw(renderer.getSpriteBatch());
+
 		
 		for (Tower t : towers) {
 			t.draw(renderer.getSpriteBatch());
@@ -208,6 +238,12 @@ public class GameScreen implements Screen {
 				traps.removeIndex(i);
 			}
 		}
+		
+		
+		//STUFF TO CREATE THE SELECTBOX
+		stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
+		stage.draw();
+		Table.drawDebug(stage);
 	}
 	
 	/*
