@@ -16,6 +16,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.loaders.resolvers.ExternalFileHandleResolver;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -23,15 +24,18 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.Map;
+import com.badlogic.gdx.maps.tiled.TideMapLoader;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 
@@ -42,8 +46,8 @@ public class GameScreen implements Screen {
 	static final int TILE_SIZE = 80;
 	static final int SPAWN_X = 0;
 	static final int SPAWN_Y = ScreenInfo.HEIGHT / 2 - ScreenInfo.TILE_SIZE;
-	static final int GOAL_X = ScreenInfo.WIDTH / 2; 
-	static final int GOAL_Y = ScreenInfo.HEIGHT - ScreenInfo.TILE_SIZE;
+	static final int GOAL_X = ScreenInfo.WIDTH - 2 * ScreenInfo.TILE_SIZE; 
+	static final int GOAL_Y = ScreenInfo.HEIGHT / 2;
 	static final int DIFFICULTY_MODIFIER = 1;
 	
 	
@@ -69,6 +73,9 @@ public class GameScreen implements Screen {
 	Array<Trap> traps;
 	Texture trapImage;
 	Game game;
+	Stage stage;
+	Texture mapImage;
+	private Sprite mapSprite;
 	
 	public GameScreen(Game game) {
 		this.game = game;
@@ -86,6 +93,7 @@ public class GameScreen implements Screen {
 		towerImage = new Texture(Gdx.files.internal("Tower.png"));
 		projectileImage = new Texture(Gdx.files.internal("Projectile.png"));
 		trapImage = new Texture(Gdx.files.internal("Trap.png"));
+//		mapImage = new Texture(Gdx.files.internal("level1final.png"));
 		
 		//Setup camera, will be static for this game
 		camera = new OrthographicCamera();
@@ -99,7 +107,9 @@ public class GameScreen implements Screen {
 		traps = new Array<Trap>();
 		towers = new Array<Tower>();
 		
-		map = new TiledMap();
+		map = new TmxMapLoader().load("level1final.tmx");
+//		mapSprite = new Sprite(mapImage);
+//		mapSprite.setSize(ScreenInfo.WIDTH, ScreenInfo.HEIGHT);
 		
 		//The map layer that will hold created objects and detect collisions
 //		collisionLayer = createCollisionLayer();
@@ -112,6 +122,7 @@ public class GameScreen implements Screen {
 		//Setup the renderer
 		renderer = new OrthogonalTiledMapRenderer(map);
 		renderer.setView(camera);
+		
 	}
 
 	@Override
@@ -131,6 +142,7 @@ public class GameScreen implements Screen {
 		 * Draw all of the objects here
 		 */
 		renderer.getSpriteBatch().begin();
+//		mapSprite.draw(renderer.getSpriteBatch());
 		
 		for (Tower t : towers) {
 			t.draw(renderer.getSpriteBatch());
@@ -198,33 +210,37 @@ public class GameScreen implements Screen {
 		}
 	}
 	
-	
-	public TiledMapTileLayer createCollisionLayer() {
-		TiledMapTileLayer layer = new TiledMapTileLayer
-				(ScreenInfo.WIDTH/ScreenInfo.TILE_SIZE,
-				ScreenInfo.HEIGHT/ScreenInfo.TILE_SIZE, 
-				ScreenInfo.TILE_SIZE, ScreenInfo.TILE_SIZE);
-		
-		Cell cell;
-		TextureRegion region;
-		StaticTiledMapTile newTile;
-		
-		for (int x = 0; x < layer.getWidth(); x++) {
-			for (int y = 0; y < layer.getHeight(); y++) {
-				cell = new Cell();
-				region = new TextureRegion(new Texture(), ScreenInfo.TILE_SIZE, ScreenInfo.TILE_SIZE);
-				newTile = new StaticTiledMapTile(region);
-				newTile.getProperties().put("blocked", true);
-				newCell.setTile(newTile);
-				layer.setCell(x, y, new Cell)
-			}
-		}
-		
-		
-		
-		
-		return layer;
-	}
+	/*
+	 * 
+	 * IGNRORE THIS FOR NOW
+	 * 
+	 */
+//	public TiledMapTileLayer createCollisionLayer() {
+//		TiledMapTileLayer layer = new TiledMapTileLayer
+//				(ScreenInfo.WIDTH/ScreenInfo.TILE_SIZE,
+//				ScreenInfo.HEIGHT/ScreenInfo.TILE_SIZE, 
+//				ScreenInfo.TILE_SIZE, ScreenInfo.TILE_SIZE);
+//		
+//		Cell cell;
+//		TextureRegion region;
+//		StaticTiledMapTile newTile;
+//		
+//		for (int x = 0; x < layer.getWidth(); x++) {
+//			for (int y = 0; y < layer.getHeight(); y++) {
+//				cell = new Cell();
+//				region = new TextureRegion(new Texture(), ScreenInfo.TILE_SIZE, ScreenInfo.TILE_SIZE);
+//				newTile = new StaticTiledMapTile(region);
+//				newTile.getProperties().put("blocked", true);
+//				newCell.setTile(newTile);
+//				layer.setCell(x, y, new Cell)
+//			}
+//		}
+//		
+//		
+//		
+//		
+//		return layer;
+//	}
 	
 	/**
 	 * Converts coordinate from screen WIDTH x HEIGHT to the tile coordinate
@@ -342,7 +358,7 @@ public class GameScreen implements Screen {
 		Cell cell = layer.getCell(convertCoordinate(stick.x), convertCoordinate(stick.y));
 		
 		//If there is not already a something there
-		if (cell == null) {
+		if (cell == null || !(cell.getTile().getProperties().containsKey("blocked"))) {
 			//Create new wall and put it at that spot
 			Cell newCell = new Cell();
 			TextureRegion region = new TextureRegion(towerImage, TILE_SIZE, TILE_SIZE);

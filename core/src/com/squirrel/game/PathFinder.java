@@ -39,8 +39,8 @@ public class PathFinder {
 		createNodes(mapLayer);
 		
 //		//Log for testing
-//		Gdx.app.log("height: ", ((Integer) layer.getHeight()).toString());
-//		Gdx.app.log("width: ", ((Integer) layer.getWidth()).toString());
+//		Gdx.app.log("height: ", ((Integer) mapLayer.getHeight()).toString());
+//		Gdx.app.log("width: ", ((Integer) mapLayer.getWidth()).toString());
 	}
 	
 	/**
