@@ -135,7 +135,6 @@ public class GameScreen implements Screen {
 		renderer = new OrthogonalTiledMapRenderer(map);
 		renderer.setView(camera);
 	
-		
 		//Creates the SelectBox for Tower Selection
 		Skin skin = new Skin(Gdx.files.internal("defaultskin.json"));
 		structureSelect = new SelectBox<String>(skin);
@@ -159,14 +158,12 @@ public class GameScreen implements Screen {
 	    
 	    nextButton.sizeBy(20, 20);
 	    nextButton.setX(stage.getWidth()-nextButton.getWidth());
-	    
-	    
+	        
 	    Table table = new Table();
 	    table.setFillParent(true);
 	    stage.addActor(table);
 	    table.addActor(structureSelect);
 	    table.addActor(nextButton);
-	    
 	    
 	    lifeDisplay = new Label("Lives: " + player.getLives(), skin);
 	    lifeDisplay.setX((stage.getWidth() - lifeDisplay.getWidth())/2);

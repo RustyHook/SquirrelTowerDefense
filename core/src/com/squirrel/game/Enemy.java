@@ -119,11 +119,22 @@ public abstract class Enemy extends Sprite implements Movable {
 		setY(getY() + velocity.y * delta);
 	}
 	
+	/**
+	 * Updates the squirrels path
+	 * @param mapLayer Layer of a map the squirrel is traveling on
+	 */
 	public void updatePath(TiledMapTileLayer mapLayer) {
 		Vector2 currentPosition = new Vector2 (
 				ScreenInfo.toMapCoordinate(getX()),
 				ScreenInfo.toMapCoordinate(getY()));
 		setPath(new PathFinder(mapLayer).findShortestPath(currentPosition, goal));
+		
+		//If the next cell would be blocked, update the next position
+		if ((mapLayer.getCell(ScreenInfo.toMapCoordinate(next.x),
+				ScreenInfo.toMapCoordinate(next.y)).getTile()
+				.getProperties().containsKey("blocked")) && path.size() > 0) {
+			next = path.peek();
+		}
 	}
 	
 	/**
