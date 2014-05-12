@@ -66,6 +66,7 @@ public class GameScreen implements Screen {
 	
 	SelectBox<String> structureSelect;
 	TextButton nextButton;
+	TextButton deleteButton;
 	String[] structureList = {"Stick Tower (10)", "Max With His Master's (100)", "Life Tower (50)", "Resource Tower (50)", "Stick Trap (2)",  "SomeTowerWithALongName"};
 	
 	Array<Enemy> enemies;
@@ -79,6 +80,7 @@ public class GameScreen implements Screen {
 	Label stoneDisplay, woodDisplay, lifeDisplay, errorMessage;
 	Vector2 spawn;
 	Vector2 goal;
+	Structure selectedStructure;
 	
 	public GameScreen(Game game) {
 		this.game = game;
@@ -158,12 +160,41 @@ public class GameScreen implements Screen {
 	    
 	    nextButton.sizeBy(20, 20);
 	    nextButton.setX(stage.getWidth()-nextButton.getWidth());
-	        
+	    
+	    //Creates the "Next Wave" button
+	    deleteButton = new TextButton("Destroy Tower", skin);
+	    deleteButton.addListener(new ClickListener() {
+	    	public void clicked(InputEvent event, float x, float y) {
+	    		//Refund the player
+	    		player.addWood(selectedStructure.getCost());
+	    		
+	    		//delete the structure from map
+	    		mainLayer.setCell(ScreenInfo.toMapCoordinate(selectedStructure.getX()), 
+	    				ScreenInfo.toMapCoordinate(selectedStructure.getY()), null);
+	    		
+	    		//remove structure from the array of structures
+	    		for (int i = 0; i < towers.size; i++) {
+	    			if (towers.get(i).getX() == selectedStructure.getX() &&
+	    					towers.get(i).getY() == selectedStructure.getY()) {
+	    				towers.removeIndex(i);
+	    				break;
+	    			}
+	    		}
+	    		
+	    		deleteButton.setVisible(false);
+	    	}
+	    });
+	    
+	    deleteButton.sizeBy(20, 20);
+	    deleteButton.setX(stage.getWidth() / 2);
+	    deleteButton.setVisible(false);
+	    
 	    Table table = new Table();
 	    table.setFillParent(true);
 	    stage.addActor(table);
 	    table.addActor(structureSelect);
 	    table.addActor(nextButton);
+	    table.addActor(deleteButton);
 	    
 	    lifeDisplay = new Label("Lives: " + player.getLives(), skin);
 	    lifeDisplay.setX((stage.getWidth() - lifeDisplay.getWidth())/2);
@@ -293,6 +324,10 @@ public class GameScreen implements Screen {
 		
 		
 		if (cell == null ||!(cell.getTile().getProperties().containsKey("blocked"))) {
+			//Unselect whatever was selected
+			selectedStructure = null;
+			deleteButton.setVisible(false);
+			
 			String structureChosen = structureSelect.getSelected();
 			float structX = ScreenInfo.toMapCoordinate(xPos) * ScreenInfo.TILE_SIZE;
 			float structY = ScreenInfo.toMapCoordinate(yPos) * ScreenInfo.TILE_SIZE;		
@@ -312,7 +347,8 @@ public class GameScreen implements Screen {
 
 			//TODO WHAT IF PLAYER WANTS TO UPGRADE OR DELETE??	
 		} else if (cell.getTile().getProperties().containsKey("structure")) {	
-			Structure struct = (Structure) cell.getTile().getProperties().get("structure");
+			selectedStructure = (Structure) cell.getTile().getProperties().get("structure");
+			deleteButton.setVisible(true);
 		}
 	}
 	
