@@ -72,17 +72,14 @@ public class GameScreen implements Screen {
 	
 	SelectBox<String> structureSelect;
 	TextButton nextButton;
-<<<<<<< HEAD
 	String[] structureList = {"Stick Tower (15)", 
 			"Buff Tower (25)", 
 			"Life Tower (50)", 
 			"Resource Tower (50)", 
 			"Stick Trap (2)",  
 			"Professor Max (200)"};
-=======
+
 	TextButton deleteButton;
-	String[] structureList = {"Stick Tower (10)", "Max With His Master's (100)", "Life Tower (50)", "Resource Tower (50)", "Stick Trap (2)",  "SomeTowerWithALongName"};
->>>>>>> 314843f30baa219a8418a9b5cba65c65c6d7dbd7
 	
 	Array<Enemy> enemies;
 	Array<Tower> towers;
