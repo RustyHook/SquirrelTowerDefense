@@ -212,6 +212,11 @@ public class GameScreen implements Screen {
 			currentWave.updateMap(mainLayer);
 		}
 		
+		//Update enemy paths
+		for (Enemy e : enemies) {
+			e.updatePath(mainLayer);
+		}
+		
 		/*
 		 * BEGINS RENDERING
 		 * Draw all of the objects here
@@ -249,11 +254,6 @@ public class GameScreen implements Screen {
 						ScreenInfo.toMapCoordinate(traps.get(i).getY()), null);
 				traps.removeIndex(i);
 			}
-		}
-		
-		//Update enemy paths
-		for (Enemy e : enemies) {
-			e.updatePath(mainLayer);
 		}
 		
 		//STUFF TO CREATE THE SELECTBOX
@@ -339,12 +339,13 @@ public class GameScreen implements Screen {
 				errorMessage.setText("Insufficient Wood: Cannot Build Tower");
 				errorMessage.setX((stage.getWidth() - errorMessage.getWidth())/2);
 				errorMessage.setVisible(true);
+				mainLayer.setCell(ScreenInfo.toMapCoordinate(x), ScreenInfo.toMapCoordinate(y), oldCell);
 			}
 		
 		else if(pathFinder.findShortestPath(
 				new Vector2(ScreenInfo.toMapCoordinate(SPAWN_X), ScreenInfo.toMapCoordinate(SPAWN_Y)), 
 				new Vector2(ScreenInfo.toMapCoordinate(GOAL_X), ScreenInfo.toMapCoordinate(GOAL_Y))) == null){
-			errorMessage.setText("Path Becomes Null: Cannot Build Tower");
+			errorMessage.setText("Cannot build tower: You must leave the squirrels a path!");
 			 errorMessage.setX((stage.getWidth() - errorMessage.getWidth())/2);
 			errorMessage.setVisible(true);
 			mainLayer.setCell(ScreenInfo.toMapCoordinate(x), ScreenInfo.toMapCoordinate(y), oldCell);

@@ -36,11 +36,10 @@ public class Squirrel extends Enemy {
 		super(new Sprite(new Texture(IMAGE)), x, y, HEALTH, SPEED, REWARD, goal, path);
 	}
 	
+	//For testing
 	public String toString() {
 		String out = "";
 		out += "\nSquirrel: " + super.toString();
-		
-		
 		return out;
 	}
 }
