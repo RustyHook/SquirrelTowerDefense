@@ -11,14 +11,18 @@ package com.squirrel.game;
 import java.util.Stack;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
-public abstract class Enemy extends Sprite implements Movable {
+public abstract class Enemy extends Sprite implements Movable{
 	
 	//These values can be changed for balance
 	private float speed;
@@ -32,6 +36,15 @@ public abstract class Enemy extends Sprite implements Movable {
 	private boolean reachedGoal;
 	private boolean dead;
 	private Vector2 goal;
+	
+	//Added to test animation
+	private SpriteBatch batch1;
+	private TextureAtlas textureAtlas;
+	private Animation animation;
+	private float elapsedTime = 0;
+	private float x = 0;
+	private float y = 120;
+	private boolean isAnimated = false;
 	
 	/**
 	 * Constructs a new enemy with a sprite, x and y coordinates, and
@@ -67,12 +80,53 @@ public abstract class Enemy extends Sprite implements Movable {
 		reachedGoal = false;
 	}
 	
+	public Enemy(Sprite sprite, int x, int y, float health, float speed, int reward,
+			Vector2 goal, Array<Vector2> path, String fileName) {
+		super(sprite);
+		
+		isAnimated = true;
+
+		batch1 = new SpriteBatch();
+		textureAtlas = new TextureAtlas(Gdx.files.internal(fileName));
+		animation = new Animation(1/30f, textureAtlas.getRegions());
+
+		//Set the x and y position using the Sprite methods
+		setX(x);
+		setY(y);
+
+		this.health = health;
+		this.speed = speed;
+		this.setReward(reward);
+		this.goal = goal;
+
+		velocity = new Vector2();
+		this.path = new Stack<Vector2>();
+
+		//Get the path ready to be traveled
+		setPath(path);
+		next = path.peek();
+		reachedGoal = false;
+	}
+	
 	@Override
 	public void draw(Batch batch) {
 		//Update the enemy based off the time between 
 		//this frame and the last frame
 		update(Gdx.graphics.getDeltaTime());
+		
+		//For animated sprites
+		if(isAnimated){
+			batch1.begin();
+
+			elapsedTime += Gdx.graphics.getDeltaTime();
+
+			batch1.draw(animation.getKeyFrame(elapsedTime, true), x, y);
+			batch1.end();
+		}
+        
+		//Static sprites 
 		super.draw(batch);
+		
 	}
 	
 	/**
@@ -117,7 +171,9 @@ public abstract class Enemy extends Sprite implements Movable {
 
 		//Update position
 		setX(getX() + velocity.x * delta);
+		x = x + velocity.x * delta;
 		setY(getY() + velocity.y * delta);
+		y = y + velocity.y * delta;
 	}
 	
 	/**

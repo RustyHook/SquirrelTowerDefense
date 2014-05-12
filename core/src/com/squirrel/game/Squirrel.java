@@ -20,8 +20,9 @@ public class Squirrel extends Enemy {
 	static final float HEALTH = 10;
 	static final int REWARD = 2;
 	static final FileHandle IMAGE = Gdx.files.internal("squirrel.png");
-	static final TextureAtlas a = new TextureAtlas(Gdx.files.internal("squirrelSheet.atlas"));
-	static final Array<Sprite> spriteArray = a.createSprites();
+	//Name of the atlas file that contains
+	//information about the sprite sheet.
+	static final String fileName = "squirrelSheet.atlas";
 	
 	/**
 	 * Constructs a new squirrel with a sprite, x and y coordinates, and
@@ -36,8 +37,8 @@ public class Squirrel extends Enemy {
 	 * @param squirrelPath Path the squirrel will follow in reverse order
 	 */
 	public Squirrel(int x, int y, Vector2 goal, Array<Vector2> path) {
-		//super(new Sprite(new Texture(IMAGE)), x, y, HEALTH, SPEED, REWARD, goal, path);
-		super(spriteArray.get(0), x, y, HEALTH, SPEED, REWARD, goal, path);
+		//super(new Sprite(new Texture(IMAGE)), x, y, HEALTH, SPEED, REWARD, goal, path)
+		super(new Sprite(new Texture(IMAGE)), x, y, HEALTH, SPEED, REWARD, goal, path, fileName);
 	}
 	
 	//For testing
