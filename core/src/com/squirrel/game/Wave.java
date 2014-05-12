@@ -27,6 +27,7 @@ public abstract class Wave {
 	private Vector2 spawn;
 	private Vector2 goal;
 	private Array<Vector2> path;
+	private Player player;
 	
 	/**
 	 * Constructs a new wave of enemies 
@@ -37,13 +38,14 @@ public abstract class Wave {
 	 * @param spawn Position that the enemies will spawn at IN MAP TILES COORDINATES
 	 * @param goal Position that the enemies are trying to reach IN MAP TILES COORDINATES
 	 */
-	public Wave (TiledMapTileLayer mapLayer, String message, int woodReward,
+	public Wave (TiledMapTileLayer mapLayer, Player player, String message, int woodReward,
 			int stoneReward, Vector2 spawn, Vector2 goal) {
 		this.message = message;
 		this.woodReward = woodReward;
 		this.stoneReward = stoneReward;
 		this.spawn = spawn;
 		this.goal = goal;
+		this.player = player;
 		
 		setPath(new PathFinder(mapLayer).findShortestPath(spawn, goal));
 		spawnedEnemies = new Array<Enemy>();
@@ -64,8 +66,11 @@ public abstract class Wave {
 		
 		//Draw spawned enemies and remove ones that are done
 		for (int i = 0; i < spawnedEnemies.size; i++) {
-			if (spawnedEnemies.get(i).isDead() || 
-					spawnedEnemies.get(i).hasReachedGoal()) {
+			if (spawnedEnemies.get(i).isDead()) {
+				player.addWood(spawnedEnemies.get(i).getReward());
+				spawnedEnemies.removeIndex(i);
+			} else if (spawnedEnemies.get(i).hasReachedGoal()) {
+				player.decreaseLives();
 				spawnedEnemies.removeIndex(i);
 			} else {
 				spawnedEnemies.get(i).draw(batch);
@@ -80,6 +85,18 @@ public abstract class Wave {
 		if (!(enemies.size < 1))
 			spawnedEnemies.add(enemies.pop());
 		lastSpawnTime = TimeUtils.nanoTime();
+	}
+	
+	public Array<Enemy> getSpawnedEnemies() {
+		return spawnedEnemies;
+	}
+	
+	public boolean isOver() {
+		return enemies.size == 0 && spawnedEnemies.size == 0;
+	}
+	
+	public void updateMap(TiledMapTileLayer mapLayer) {
+		setPath(new PathFinder(mapLayer).findShortestPath(spawn, goal));
 	}
 	
 	/**

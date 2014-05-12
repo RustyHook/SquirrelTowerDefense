@@ -13,6 +13,7 @@ import java.util.Stack;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
@@ -29,6 +30,7 @@ public abstract class Enemy extends Sprite implements Movable {
 	private Vector2 next;
 	private boolean reachedGoal;
 	private boolean dead;
+	private Vector2 goal;
 	
 	/**
 	 * Constructs a new enemy with a sprite, x and y coordinates, and
@@ -42,7 +44,8 @@ public abstract class Enemy extends Sprite implements Movable {
 	 * @param y Y coordinate
 	 * @param path Path the enemy will follow in reverse order
 	 */
-	public Enemy(Sprite sprite, int x, int y, float health, float speed, int reward, Array<Vector2> path) {
+	public Enemy(Sprite sprite, int x, int y, float health, float speed, int reward,
+			Vector2 goal, Array<Vector2> path) {
 		super(sprite);
 		
 		//Set the x and y position using the Sprite methods
@@ -52,6 +55,7 @@ public abstract class Enemy extends Sprite implements Movable {
 		this.health = health;
 		this.speed = speed;
 		this.setReward(reward);
+		this.goal = goal;
 		
 		velocity = new Vector2();
 		this.path = new Stack<Vector2>();
@@ -115,6 +119,13 @@ public abstract class Enemy extends Sprite implements Movable {
 		setY(getY() + velocity.y * delta);
 	}
 	
+	public void updatePath(TiledMapTileLayer mapLayer) {
+		Vector2 currentPosition = new Vector2 (
+				ScreenInfo.toMapCoordinate(getX()),
+				ScreenInfo.toMapCoordinate(getY()));
+		setPath(new PathFinder(mapLayer).findShortestPath(currentPosition, goal));
+	}
+	
 	/**
 	 * Determines if the enemy has reached its goal
 	 * @return True if it has reached, else false
@@ -155,6 +166,8 @@ public abstract class Enemy extends Sprite implements Movable {
 			Gdx.app.log("Enemy: ", "Path is null...");
 		} else {
 			//Store the path in a stack
+			path = new Stack<Vector2>();
+			
 			for (Vector2 v : newPath)
 				path.push(v);
 		}

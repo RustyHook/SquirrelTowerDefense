@@ -285,6 +285,12 @@ public class PathFinder {
 		
 		Node start = nodeGraph[(int) startPosition.x][(int) startPosition.y];
 		Node goal = nodeGraph[(int) goalPosition.x][(int) goalPosition.y];
+		
+		//Return null if goal is unreachable
+		if (goal == null || goal.position == null) {
+			return null;
+		}
+		
 		openSet.add(start);
 		
 		while (openSet.size() > 0) {

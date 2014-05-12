@@ -1,15 +1,17 @@
 package com.squirrel.game;
 
 public class Player {
+	static final int STARTING_WOOD = 50;
+	static final int STARTING_LIVES = 20;
 	
 	private int wood;
 	private int stone;
 	private int lives;
 	
-	public Player (int wood, int stone, int lives) {
-		this.wood = wood;
-		this.stone = stone;
-		this.lives = lives;
+	public Player () {
+		this.wood = STARTING_WOOD;
+		this.stone = 0;
+		this.lives = STARTING_LIVES;
 	}
 
 
@@ -25,10 +27,10 @@ public class Player {
 	}
 
 	/**
-	 * @param lives The amount of lives to decrease
+	 * Decreases life by 1
 	 */
-	public void decreaseLives(int amount) {
-		lives -= amount;
+	public void decreaseLives() {
+		lives -= 1;
 	}
 
 	/**
@@ -43,7 +45,7 @@ public class Player {
 	 * @param amount Amount of stone
 	 */
 	public void addStone(int amount) {
-		stone -= amount;
+		stone += amount;
 	}
 	
 	/**
@@ -69,7 +71,7 @@ public class Player {
 	 * @param amount Amount of wood
 	 */
 	public void addWood(int amount) {
-		wood -= amount;
+		wood += amount;
 	}
 	
 	/**
