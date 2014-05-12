@@ -431,7 +431,11 @@ public class GameScreen implements Screen {
 	 */
 	private void spawnTrap(float x, float y, Trap trap) {
 		//Don't let it be built if the player doesnt have enough wood
-		if (player.getWood() < trap.getCost()) {
+		//or there is already a trap in this cell
+		Cell cell = mainLayer.getCell(ScreenInfo.toMapCoordinate(x), 
+				ScreenInfo.toMapCoordinate(y));
+		if (player.getWood() < trap.getCost() || (cell != null &&
+				cell.getTile().getProperties().containsKey("trap"))) {
 			return;
 		}
 		
@@ -439,6 +443,7 @@ public class GameScreen implements Screen {
 		Cell newCell = new Cell();
 		TextureRegion region = new TextureRegion(trap.getTexture());
 		StaticTiledMapTile newTile = new StaticTiledMapTile(region);
+		newTile.getProperties().put("trap", trap);
 		newCell.setTile(newTile);
 		mainLayer.setCell(ScreenInfo.toMapCoordinate(x), ScreenInfo.toMapCoordinate(y), newCell);
 
