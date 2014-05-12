@@ -1,7 +1,7 @@
 package com.squirrel.game;
 
 public class Player {
-	static final int STARTING_WOOD = 50;
+	static final int STARTING_WOOD = 100;
 	static final int STARTING_LIVES = 20;
 	
 	private int wood;
@@ -31,6 +31,14 @@ public class Player {
 	 */
 	public void decreaseLives() {
 		lives -= 1;
+	}
+	
+	/**
+	 * Increase life by the amount of lifeTowers in the game.
+	 */
+	
+	public void increaseLives() {
+		lives += GameScreen.lifeTowers;
 	}
 
 	/**

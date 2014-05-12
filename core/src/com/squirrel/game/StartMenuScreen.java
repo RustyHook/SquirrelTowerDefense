@@ -57,6 +57,7 @@ public class StartMenuScreen implements Screen {
 	    stage.addActor(button);
 	    
 	    
+	    /*
 	    //Creates a SelectBox that displays the Array.
 	    String[] array = new String[3];
 	    array[0] = "ZERO";
@@ -71,6 +72,7 @@ public class StartMenuScreen implements Screen {
 	    selectBox.setItems(array);
 	    selectBox.sizeBy(50);
 	    stage.addActor(selectBox);
+	    */
 	    
 	    //Give the button a listener!
 	    button.addListener(new ClickListener() {

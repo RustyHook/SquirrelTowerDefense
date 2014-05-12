@@ -97,7 +97,7 @@ public abstract class Tower extends Structure {
 		//Update the projectiles
 		for (int i = 0; i < projectiles.size; i++) {
 			if (projectiles.get(i).reachedTarget()) {
-				target.takeDamage(damage);
+				target.takeDamage((int)(damage * GameScreen.damageMultiplier));
 				projectiles.removeIndex(i);
 			} else {
 				projectiles.get(i).draw(batch);

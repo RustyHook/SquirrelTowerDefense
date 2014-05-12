@@ -1,5 +1,9 @@
 /**
- * A test tower that grants double the amount of resources per squirrel killed.
+ * A tower that increases the the amount of resources per squirrel killed by 100%.
+ * This stacks additively. 
+ * For example:
+ * 1 Resource Tower and 1 Squirrel worth 5 resources = 10
+ * 2 Resource Tower and 1 Squirrel worth 5 resources = 15
  */
 
 package com.squirrel.game;
@@ -30,5 +34,6 @@ public class ResourceTower extends Tower {
 		super(new Sprite(new Texture(TOWER_IMAGE)), x, y, COST, DAMAGE, RANGE, 
 				ATTACK_RATE, PROJECTILE_SPEED,
 				new Sprite(new Texture(PROJECTILE_IMAGE)), possibleTargets);
+		GameScreen.resourceMultiplier = (GameScreen.resourceMultiplier+4)/2;
 	}
 }

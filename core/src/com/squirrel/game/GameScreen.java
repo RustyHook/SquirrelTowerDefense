@@ -45,6 +45,9 @@ public class GameScreen implements Screen {
 	static final int GOAL_X = ScreenInfo.WIDTH - 2 * ScreenInfo.TILE_SIZE; 
 	static final int GOAL_Y = ScreenInfo.HEIGHT / 2;
 	static final int DIFFICULTY_MODIFIER = 1;
+	static double damageMultiplier = 1;
+	static double resourceMultiplier = 1;
+	static int lifeTowers = 0;
 	
 	//Instance fields
 	SpriteBatch batch;
@@ -64,9 +67,17 @@ public class GameScreen implements Screen {
 	Texture mapImage;
 	private Sprite mapSprite;
 	
+	Skin skin;
+	Table table;
+	
 	SelectBox<String> structureSelect;
 	TextButton nextButton;
-	String[] structureList = {"Stick Tower (10)", "Max With His Master's (100)", "Life Tower (50)", "Resource Tower (50)", "Stick Trap (2)",  "SomeTowerWithALongName"};
+	String[] structureList = {"Stick Tower (15)", 
+			"Buff Tower (25)", 
+			"Life Tower (50)", 
+			"Resource Tower (50)", 
+			"Stick Trap (2)",  
+			"Professor Max (200)"};
 	
 	Array<Enemy> enemies;
 	Array<Tower> towers;
@@ -137,7 +148,7 @@ public class GameScreen implements Screen {
 	
 		
 		//Creates the SelectBox for Tower Selection
-		Skin skin = new Skin(Gdx.files.internal("defaultskin.json"));
+		skin = new Skin(Gdx.files.internal("defaultskin.json"));
 		structureSelect = new SelectBox<String>(skin);
 	    structureSelect.setItems(structureList);
 	    structureSelect.sizeBy(150, 5);
@@ -161,7 +172,7 @@ public class GameScreen implements Screen {
 	    nextButton.setX(stage.getWidth()-nextButton.getWidth());
 	    
 	    
-	    Table table = new Table();
+	    table = new Table();
 	    table.setFillParent(true);
 	    stage.addActor(table);
 	    table.addActor(structureSelect);
@@ -183,15 +194,13 @@ public class GameScreen implements Screen {
 	    stoneDisplay.setY(woodDisplay.getY() - stoneDisplay.getHeight());
 	    table.addActor(stoneDisplay);
 	    
-	    errorMessage = new Label("                                                      ", skin);
+	    errorMessage = new Label(waves.peek().getMessage(), skin);
+		errorMessage.setX((stage.getWidth() - errorMessage.getWidth())/2);
 	    errorMessage.setY(woodDisplay.getY() + errorMessage.getHeight());
-	    errorMessage.setVisible(false);
+		errorMessage.setVisible(true);
 	    table.addActor(errorMessage);
 	    
 	    //Set wave one message to show
-	    errorMessage.setText(waves.peek().getMessage());
-		errorMessage.setX((stage.getWidth() - errorMessage.getWidth())/2);
-		errorMessage.setVisible(true);
 	}
 
 	@Override
@@ -212,8 +221,10 @@ public class GameScreen implements Screen {
 			} else {
 				waveInProgress = false;
 				player.addWood(currentWave.getWoodReward());
+				Label temp = new Label(waves.peek().getMessage(), skin);
 				errorMessage.setText(waves.peek().getMessage());
-				errorMessage.setX((stage.getWidth() - errorMessage.getWidth())/2);
+				errorMessage.setX((stage.getWidth() - temp.getWidth())/2);
+			    errorMessage.setY(woodDisplay.getY() + errorMessage.getHeight());
 				errorMessage.setVisible(true);
 			}
 		} else if (waveInProgress) {
@@ -303,7 +314,7 @@ public class GameScreen implements Screen {
 			switch (structureChosen) {
 			case "Stick Tower ("+StickTower.COST+")": spawnTower(xPos, yPos, new StickTower(structX, structY, enemies));
 				break;
-			case "Max With His Master's ("+MaxTower.COST+")": spawnTower(xPos, yPos, new MaxTower(structX, structY, enemies));
+			case "Buff Tower ("+BuffTower.COST+")": spawnTower(xPos, yPos, new BuffTower(structX, structY, enemies));
 				break;
 			case "Life Tower ("+LifeTower.COST+")": spawnTower(xPos, yPos, new LifeTower(structX, structY, enemies));
 				break;
@@ -311,7 +322,9 @@ public class GameScreen implements Screen {
 				break;
 			case "Stick Trap ("+StickTrap.COST+")": spawnTrap(xPos, yPos, new StickTrap(structX, structY, enemies));
 				break;
-			}
+			case "Professor Max ("+MaxTower.COST+")": spawnTower(xPos, yPos, new MaxTower(structX, structY, enemies));
+				break;
+		}
 
 			//TODO WHAT IF PLAYER WANTS TO UPGRADE OR DELETE??	
 		} else if (cell.getTile().getProperties().containsKey("structure")) {	
@@ -326,6 +339,7 @@ public class GameScreen implements Screen {
 	 * @param tower The tower to be spawned
 	 */
 	private void spawnTower(float x, float y, Tower tower) {
+		
 		//Create new structure and put it at that spot
 		Cell newCell = new Cell();
 		Cell oldCell = mainLayer.getCell(ScreenInfo.toMapCoordinate(x), ScreenInfo.toMapCoordinate(y));
@@ -342,18 +356,22 @@ public class GameScreen implements Screen {
 		
 		//If not enough resources OR
 		//If no path exists to the goal, do not build the tower.
-		 if(player.getWood() < tower.getCost()){
-				errorMessage.setText("Insufficient Wood: Cannot Build Tower");
-				errorMessage.setX((stage.getWidth() - errorMessage.getWidth())/2);
-				errorMessage.setVisible(true);
-				mainLayer.setCell(ScreenInfo.toMapCoordinate(x), ScreenInfo.toMapCoordinate(y), oldCell);
-			}
-		
+		if(player.getWood() < tower.getCost()){
+			Label temp = new Label("Insufficient Wood: Cannot Build Tower", skin);
+			errorMessage.setText("Insufficient Wood: Cannot Build Tower");
+			errorMessage.setX((stage.getWidth() - temp.getWidth())/2);
+			errorMessage.setY(woodDisplay.getY() + errorMessage.getHeight());
+			errorMessage.setVisible(true);
+			mainLayer.setCell(ScreenInfo.toMapCoordinate(x), ScreenInfo.toMapCoordinate(y), oldCell);
+		}
+
 		else if(pathFinder.findShortestPath(
 				new Vector2(ScreenInfo.toMapCoordinate(SPAWN_X), ScreenInfo.toMapCoordinate(SPAWN_Y)), 
 				new Vector2(ScreenInfo.toMapCoordinate(GOAL_X), ScreenInfo.toMapCoordinate(GOAL_Y))) == null){
+			Label temp = new Label("Cannot build tower: You must leave the squirrels a path!", skin);
 			errorMessage.setText("Cannot build tower: You must leave the squirrels a path!");
-			 errorMessage.setX((stage.getWidth() - errorMessage.getWidth())/2);
+			errorMessage.setX((stage.getWidth() - temp.getWidth())/2);
+		    errorMessage.setY(woodDisplay.getY() + errorMessage.getHeight());
 			errorMessage.setVisible(true);
 			mainLayer.setCell(ScreenInfo.toMapCoordinate(x), ScreenInfo.toMapCoordinate(y), oldCell);
 			return;

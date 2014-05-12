@@ -67,7 +67,12 @@ public abstract class Wave {
 		//Draw spawned enemies and remove ones that are done
 		for (int i = 0; i < spawnedEnemies.size; i++) {
 			if (spawnedEnemies.get(i).isDead()) {
-				player.addWood(spawnedEnemies.get(i).getReward());
+				
+				int rand = (int)((Math.random() * 100) + 1);
+				if(rand > 90){
+					player.increaseLives();
+				}
+				player.addWood((int)(spawnedEnemies.get(i).getReward() * GameScreen.resourceMultiplier));
 				spawnedEnemies.removeIndex(i);
 			} else if (spawnedEnemies.get(i).hasReachedGoal()) {
 				player.decreaseLives();

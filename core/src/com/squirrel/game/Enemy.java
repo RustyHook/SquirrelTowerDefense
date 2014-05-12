@@ -163,7 +163,7 @@ public abstract class Enemy extends Sprite implements Movable {
 	 */
 	public void setPath(Array<Vector2> newPath) {
 		if (newPath == null) {
-			Gdx.app.log("Enemy: ", "Path is null...");
+			//Gdx.app.log("Enemy: ", "Path is null...");
 		} else {
 			//Store the path in a stack
 			path = new Stack<Vector2>();

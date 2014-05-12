@@ -1,7 +1,7 @@
 /**
- * The most basic and cheapest tower
+ * A tower that increases the the amount damage towers do by a certain amount.
+ * This stacks additively like the Resource Tower.
  * 
- * @author Jacob Rust
  */
 
 package com.squirrel.game;
@@ -12,14 +12,14 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.utils.Array;
 
-public class StickTower extends Tower {
+public class BuffTower extends Tower {
 	//Change these values for balancing
-	static final int COST = 15;
-	static final float DAMAGE = 2;
-	static final float RANGE = 200;
-	static final float ATTACK_RATE = 1;
-	static final float PROJECTILE_SPEED = 60*4;
-	static final FileHandle TOWER_IMAGE = Gdx.files.internal("standardTower.gif");
+	static final int COST = 25;
+	static final float DAMAGE = 0;
+	static final float RANGE = 0;
+	static final float ATTACK_RATE = 0;
+	static final float PROJECTILE_SPEED = 0;
+	static final FileHandle TOWER_IMAGE = Gdx.files.internal("BuffTower.png");
 	static final FileHandle PROJECTILE_IMAGE = Gdx.files.internal("Projectile.png");
 	
 	/**
@@ -28,9 +28,11 @@ public class StickTower extends Tower {
 	 * @param y The y position of the tower
 	 * @param possibleTargets An array of possible targets the tower can hit
 	 */
-	public StickTower(float x, float y, Array<Enemy> possibleTargets) {
+	public BuffTower(float x, float y, Array<Enemy> possibleTargets) {
 		super(new Sprite(new Texture(TOWER_IMAGE)), x, y, COST, DAMAGE, RANGE, 
 				ATTACK_RATE, PROJECTILE_SPEED,
 				new Sprite(new Texture(PROJECTILE_IMAGE)), possibleTargets);
+		GameScreen.damageMultiplier = (GameScreen.damageMultiplier+2)/2;
 	}
 }
+
