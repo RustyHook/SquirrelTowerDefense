@@ -40,15 +40,11 @@ import com.badlogic.gdx.utils.Array;
 
 public class GameScreen implements Screen {
 	//The rest of the game scales off these variables
-	static final int WIDTH = 1280;
-	static final int HEIGHT = 720;
-	static final int TILE_SIZE = 80;
 	static final int SPAWN_X = 0;
 	static final int SPAWN_Y = ScreenInfo.HEIGHT / 2 - ScreenInfo.TILE_SIZE;
 	static final int GOAL_X = ScreenInfo.WIDTH - 2 * ScreenInfo.TILE_SIZE; 
 	static final int GOAL_Y = ScreenInfo.HEIGHT / 2;
 	static final int DIFFICULTY_MODIFIER = 1;
-	
 	
 	//Instance fields
 	SpriteBatch batch;
@@ -81,6 +77,8 @@ public class GameScreen implements Screen {
 	TiledMapTileLayer mainLayer;
 	Player player;
 	Label stoneDisplay, woodDisplay, lifeDisplay, errorMessage;
+	Vector2 spawn;
+	Vector2 goal;
 	
 	public GameScreen(Game game) {
 		this.game = game;
@@ -102,7 +100,6 @@ public class GameScreen implements Screen {
 		trapImage = new Texture(Gdx.files.internal("Trap.png"));
 		mapImage = new Texture(Gdx.files.internal("level1final.png"));
 		
-		
 		//Setup camera, will be static for this game
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, ScreenInfo.WIDTH, ScreenInfo.HEIGHT);
@@ -121,13 +118,16 @@ public class GameScreen implements Screen {
 		mapSprite.setSize(ScreenInfo.WIDTH, ScreenInfo.HEIGHT);
 		pathFinder = new PathFinder(mainLayer);
 		
-		//Add each wave to the array of waves
-		waves.add(new WaveOne(mainLayer, player,
-				new Vector2(ScreenInfo.toMapCoordinate(SPAWN_X), ScreenInfo.toMapCoordinate(SPAWN_Y)), 
-				new Vector2(ScreenInfo.toMapCoordinate(GOAL_X), ScreenInfo.toMapCoordinate(GOAL_Y))));
-		waves.add(new WaveTwo(mainLayer, player,
-				new Vector2(ScreenInfo.toMapCoordinate(SPAWN_X), ScreenInfo.toMapCoordinate(SPAWN_Y)), 
-				new Vector2(ScreenInfo.toMapCoordinate(GOAL_X), ScreenInfo.toMapCoordinate(GOAL_Y))));
+		spawn = new Vector2(ScreenInfo.toMapCoordinate(SPAWN_X), ScreenInfo.toMapCoordinate(SPAWN_Y));
+		goal = new Vector2(ScreenInfo.toMapCoordinate(GOAL_X), ScreenInfo.toMapCoordinate(GOAL_Y));
+		
+		//Add each wave to the array of waves, reverse order
+		waves.add(new WaveFive(mainLayer, player, spawn, goal));
+		waves.add(new WaveFour(mainLayer, player, spawn, goal));
+		waves.add(new WaveThree(mainLayer, player, spawn, goal));
+		waves.add(new WaveTwo(mainLayer, player, spawn, goal));
+		waves.add(new WaveOne(mainLayer, player, spawn, goal));
+			
 		//TODO waves.add(wave2, wave 3, wave 4... so on...
 		waveInProgress = false;
 		
@@ -301,15 +301,15 @@ public class GameScreen implements Screen {
 			float structY = ScreenInfo.toMapCoordinate(yPos) * ScreenInfo.TILE_SIZE;		
 			
 			switch (structureChosen) {
-			case "Stick Tower (10)": spawnTower(xPos, yPos, new StickTower(structX, structY, enemies));
+			case "Stick Tower ("+StickTower.COST+")": spawnTower(xPos, yPos, new StickTower(structX, structY, enemies));
 				break;
-			case "Max With His Master's (100)": spawnTower(xPos, yPos, new MaxTower(structX, structY, enemies));
+			case "Max With His Master's ("+MaxTower.COST+")": spawnTower(xPos, yPos, new MaxTower(structX, structY, enemies));
 				break;
-			case "Life Tower (50)": spawnTower(xPos, yPos, new LifeTower(structX, structY, enemies));
+			case "Life Tower ("+LifeTower.COST+")": spawnTower(xPos, yPos, new LifeTower(structX, structY, enemies));
 				break;
-			case "Resource Tower (50)": spawnTower(xPos, yPos, new ResourceTower(structX, structY, enemies));
+			case "Resource Tower ("+ResourceTower.COST+")": spawnTower(xPos, yPos, new ResourceTower(structX, structY, enemies));
 				break;
-			case "Stick Trap (2)": spawnTrap(xPos, yPos, new StickTrap(structX, structY, enemies));
+			case "Stick Trap ("+StickTrap.COST+")": spawnTrap(xPos, yPos, new StickTrap(structX, structY, enemies));
 				break;
 			}
 
@@ -332,6 +332,7 @@ public class GameScreen implements Screen {
 		TextureRegion region = new TextureRegion(tower.getTexture());
 		StaticTiledMapTile newTile = new StaticTiledMapTile(region);
 		newTile.getProperties().put("blocked", true);
+		newTile.getProperties().put("structure", tower);
 		newCell.setTile(newTile);
 		mainLayer.setCell(ScreenInfo.toMapCoordinate(x), ScreenInfo.toMapCoordinate(y), newCell);
 
