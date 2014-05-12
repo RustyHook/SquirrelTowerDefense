@@ -30,6 +30,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -69,7 +70,7 @@ public class GameScreen implements Screen {
 	
 	SelectBox<String> structureSelect;
 	TextButton nextButton;
-	String[] structureList = {"Stick Tower", "SomeTowerWithALongName", "Max His Master's", "Stick Trap"};
+	String[] structureList = {"Stick Tower (10)", "Max With His Master's (100)", "Life Tower (50)", "Resource Tower (50)", "Stick Trap (2)",  "SomeTowerWithALongName"};
 	
 	Array<Enemy> enemies;
 	Array<Tower> towers;
@@ -79,6 +80,7 @@ public class GameScreen implements Screen {
 	boolean waveInProgress;
 	TiledMapTileLayer mainLayer;
 	Player player;
+	Label stoneDisplay, woodDisplay, lifeDisplay, errorMessage;
 	
 	public GameScreen(Game game) {
 		this.game = game;
@@ -123,7 +125,7 @@ public class GameScreen implements Screen {
 		waves.add(new WaveOne(mainLayer, player,
 				new Vector2(ScreenInfo.toMapCoordinate(SPAWN_X), ScreenInfo.toMapCoordinate(SPAWN_Y)), 
 				new Vector2(ScreenInfo.toMapCoordinate(GOAL_X), ScreenInfo.toMapCoordinate(GOAL_Y))));
-		waves.add(new WaveOne(mainLayer, player,
+		waves.add(new WaveTwo(mainLayer, player,
 				new Vector2(ScreenInfo.toMapCoordinate(SPAWN_X), ScreenInfo.toMapCoordinate(SPAWN_Y)), 
 				new Vector2(ScreenInfo.toMapCoordinate(GOAL_X), ScreenInfo.toMapCoordinate(GOAL_Y))));
 		//TODO waves.add(wave2, wave 3, wave 4... so on...
@@ -138,10 +140,11 @@ public class GameScreen implements Screen {
 		Skin skin = new Skin(Gdx.files.internal("defaultskin.json"));
 		structureSelect = new SelectBox<String>(skin);
 	    structureSelect.setItems(structureList);
-	    //towerSelect.setX(200);	// USE TO CHANGE THE LOCATION OF THE SELECT BOX
-	   // towerSelect.setY(200);
-	    structureSelect.sizeBy(200, 10);
+	    structureSelect.sizeBy(150, 5);
+	    structureSelect.setX(stage.getWidth()-structureSelect.getWidth());	// USE TO CHANGE THE LOCATION OF THE SELECT BOX
+	    structureSelect.setY(stage.getHeight()-structureSelect.getHeight());
 	    
+	     
 	    //Creates the "Next Wave" button
 	    nextButton = new TextButton("Next Wave", skin);
 	    nextButton.addListener(new ClickListener() {
@@ -150,6 +153,7 @@ public class GameScreen implements Screen {
 	    			currentWave = waves.pop();
 	    			waveInProgress = true;
 	    			enemies = currentWave.getSpawnedEnemies();
+	    			errorMessage.setVisible(false);
 	    		}
 	    	}
 	    });
@@ -162,6 +166,28 @@ public class GameScreen implements Screen {
 	    stage.addActor(table);
 	    table.addActor(structureSelect);
 	    table.addActor(nextButton);
+	    
+	    
+	    lifeDisplay = new Label("Lives: " + player.getLives(), skin);
+	    lifeDisplay.setX((stage.getWidth() - lifeDisplay.getWidth())/2);
+	    lifeDisplay.setY((stage.getHeight() - nextButton.getHeight()) - 20);
+	    table.addActor(lifeDisplay);
+	    
+	    woodDisplay = new Label("Wood: " + player.getWood(), skin);
+	    woodDisplay.setX((stage.getWidth() - lifeDisplay.getWidth())/2);
+	    woodDisplay.setY(nextButton.getHeight() + 50);
+	    table.addActor(woodDisplay);
+	    
+	    stoneDisplay = new Label("Stone: " + player.getStone() + "", skin);
+	    stoneDisplay.setX((stage.getWidth() - stoneDisplay.getWidth())/2);
+	    stoneDisplay.setY(woodDisplay.getY() - stoneDisplay.getHeight());
+	    table.addActor(stoneDisplay);
+	    
+	    errorMessage = new Label("                                                      ", skin);
+	    errorMessage.setY(woodDisplay.getY() + errorMessage.getHeight());
+	    errorMessage.setVisible(false);
+	    table.addActor(errorMessage);
+	    
 
 	}
 
@@ -234,6 +260,12 @@ public class GameScreen implements Screen {
 		stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
 		stage.draw();
 		Table.drawDebug(stage);
+		
+		lifeDisplay.setText("Lives: " + player.getLives());
+		woodDisplay.setText("Wood: " + player.getWood());
+		stoneDisplay.setText("Stone: " + player.getStone());
+		
+		
 	}
 
 	/**
@@ -261,19 +293,23 @@ public class GameScreen implements Screen {
 			float structY = ScreenInfo.toMapCoordinate(yPos) * ScreenInfo.TILE_SIZE;		
 			
 			switch (structureChosen) {
-			case "Stick Tower": spawnTower(xPos, yPos, new StickTower(structX, structY, enemies));
-				 break;
-			case "Max His Master's": spawnTower(xPos, yPos, new MaxTower(structX, structY, enemies));
-				 break;
-			case "Stick Trap": spawnTrap(xPos, yPos, new StickTrap(structX, structY, enemies));
-				 break;
+			case "Stick Tower (10)": spawnTower(xPos, yPos, new StickTower(structX, structY, enemies));
+				break;
+			case "Max With His Master's (100)": spawnTower(xPos, yPos, new MaxTower(structX, structY, enemies));
+				break;
+			case "Life Tower (50)": spawnTower(xPos, yPos, new LifeTower(structX, structY, enemies));
+				break;
+			case "Resource Tower (50)": spawnTower(xPos, yPos, new ResourceTower(structX, structY, enemies));
+				break;
+			case "Stick Trap (2)": spawnTrap(xPos, yPos, new StickTrap(structX, structY, enemies));
+				break;
 			}
-			
-		//TODO WHAT IF PLAYER WANTS TO UPGRADE OR DELETE??	
+
+			//TODO WHAT IF PLAYER WANTS TO UPGRADE OR DELETE??	
 		} else if (cell.getTile().getProperties().containsKey("structure")) {	
 			Structure struct = (Structure) cell.getTile().getProperties().get("structure");
 		}
-		
+
 		
 	}
 	
@@ -299,16 +335,25 @@ public class GameScreen implements Screen {
 		
 		//If not enough resources OR
 		//If no path exists to the goal, do not build the tower.
-		if (player.getWood() < tower.getCost() ||
-				(pathFinder.findShortestPath(
+		 if(player.getWood() < tower.getCost()){
+				errorMessage.setText("Insufficient Wood: Cannot Build Tower");
+				errorMessage.setX((stage.getWidth() - errorMessage.getWidth())/2);
+				errorMessage.setVisible(true);
+			}
+		
+		else if(pathFinder.findShortestPath(
 				new Vector2(ScreenInfo.toMapCoordinate(SPAWN_X), ScreenInfo.toMapCoordinate(SPAWN_Y)), 
-				new Vector2(ScreenInfo.toMapCoordinate(GOAL_X), ScreenInfo.toMapCoordinate(GOAL_Y))) == null)) {
-			Gdx.app.log("spawnTower", "path is null");
+				new Vector2(ScreenInfo.toMapCoordinate(GOAL_X), ScreenInfo.toMapCoordinate(GOAL_Y))) == null){
+			errorMessage.setText("Path Becomes Null: Cannot Build Tower");
+			 errorMessage.setX((stage.getWidth() - errorMessage.getWidth())/2);
+			errorMessage.setVisible(true);
 			mainLayer.setCell(ScreenInfo.toMapCoordinate(x), ScreenInfo.toMapCoordinate(y), oldCell);
 			return;
-		} else {
+		} 
+		else {
 			//Update game stuff
 			towers.add(tower);
+			errorMessage.setVisible(false);
 			player.decreaseWood(tower.getCost());
 		}
 	}
