@@ -12,14 +12,14 @@ import com.badlogic.gdx.utils.Array;
 
 public class WaveFive extends Wave {
 	//Change these for balancing
-	static final int NUM_OF_SQUIRRELS = 5;
-	static final int NUM_OF_WILD_SQUIRRELS = 5;
-	static final int NUM_OF_ARCTIC_SQUIRRELS = 5;
-	static final int NUM_OF_CHICK_SQUIRRELS = 5;
+	static final int NUM_OF_SQUIRRELS = 20;
+	static final int NUM_OF_WILD_SQUIRRELS = 20;
+	static final int NUM_OF_ARCTIC_SQUIRRELS = 20;
+	static final int NUM_OF_CHICK_SQUIRRELS = 20;
 	static final int NUM_OF_BOSS_SQUIRRELS = 1;
 	static final int WOOD_REWARD = 100;
 	static final int STONE_REWARD = 10;
-	static final String MESSAGE = "Final Wave: " + " five of every squirrel you have seen!" +
+	static final String MESSAGE = "Final Wave: " + " 20 of every squirrel you have seen!" +
 				" With maybe a surprise...";
 
 	/**
@@ -45,6 +45,11 @@ public class WaveFive extends Wave {
 			enemies.add(new BossSquirrel(ScreenInfo.toScreenCoordinate(getSpawn().x), 
 					ScreenInfo.toScreenCoordinate(getSpawn().y), getGoal(), getPath()));
 		}
+		for (int i = 0; i < NUM_OF_WILD_SQUIRRELS/2; i++) {
+			//The squirrels position must be converted back to screen coordinates
+			enemies.add(new WildSquirrel(ScreenInfo.toScreenCoordinate(getSpawn().x), 
+					ScreenInfo.toScreenCoordinate(getSpawn().y), getGoal(), getPath()));
+		}
 		//Create the appropriate amount of chickfila squirrels
 		for (int i = 0; i < NUM_OF_CHICK_SQUIRRELS; i++) {
 			//The squirrels position must be converted back to screen coordinates
@@ -58,7 +63,7 @@ public class WaveFive extends Wave {
 					ScreenInfo.toScreenCoordinate(getSpawn().y), getGoal(), getPath()));
 		}
 		//Create the appropriate amount of wild squirrels
-		for (int i = 0; i < NUM_OF_WILD_SQUIRRELS; i++) {
+		for (int i = 0; i < NUM_OF_WILD_SQUIRRELS/2; i++) {
 			//The squirrels position must be converted back to screen coordinates
 			enemies.add(new WildSquirrel(ScreenInfo.toScreenCoordinate(getSpawn().x), 
 					ScreenInfo.toScreenCoordinate(getSpawn().y), getGoal(), getPath()));

@@ -12,11 +12,16 @@ import com.badlogic.gdx.utils.Array;
 
 public class WaveThree extends Wave {
 	//Change these for balancing
-	static final int NUM_OF_ARCTIC_SQUIRRELS = 10;
-	static final int WOOD_REWARD = 100;
+	
+	static final int NUM_OF_ARCTIC_SQUIRRELS = 15;
+	static final int NUM_OF_WILD_SQUIRRELS = 15;
+	static final int NUM_OF_SQUIRRELS = 10;
+	static final int WOOD_REWARD = 20;
 	static final int STONE_REWARD = 10;
-	static final String MESSAGE = "Wave 3: "+NUM_OF_ARCTIC_SQUIRRELS+
-			" arctic squirrels with"+ArcticSquirrel.HEALTH + " health";
+	static final String MESSAGE = "Wave 3: "
+			+NUM_OF_ARCTIC_SQUIRRELS+" Artic Squirrels (HP: "+ArcticSquirrel.HEALTH+") "+ "and "
+			+NUM_OF_SQUIRRELS+ " Squirrels (HP: "+Squirrel.HEALTH+")"+ "and "
+			+NUM_OF_WILD_SQUIRRELS+ " Wild Squirrels (HP: "+WildSquirrel.HEALTH+")";
 
 	/**
 	 * Constructs an object representing the first wave
@@ -36,11 +41,27 @@ public class WaveThree extends Wave {
 		Array<Enemy> enemies = new Array<Enemy>();
 		
 		//Create the appropriate amount of squirrels
+		for (int i = 0; i < NUM_OF_WILD_SQUIRRELS/2; i++) {
+			//The squirrels position must be converted back to screen coordinates
+			enemies.add(new WildSquirrel(ScreenInfo.toScreenCoordinate(getSpawn().x), 
+					ScreenInfo.toScreenCoordinate(getSpawn().y), getGoal(), getPath()));
+		}
 		for (int i = 0; i < NUM_OF_ARCTIC_SQUIRRELS; i++) {
 			//The squirrels position must be converted back to screen coordinates
 			enemies.add(new ArcticSquirrel(ScreenInfo.toScreenCoordinate(getSpawn().x), 
 					ScreenInfo.toScreenCoordinate(getSpawn().y), getGoal(), getPath()));
 		}
+		for (int i = 0; i < NUM_OF_WILD_SQUIRRELS/2; i++) {
+			//The squirrels position must be converted back to screen coordinates
+			enemies.add(new WildSquirrel(ScreenInfo.toScreenCoordinate(getSpawn().x), 
+					ScreenInfo.toScreenCoordinate(getSpawn().y), getGoal(), getPath()));
+		}
+		for (int i = 0; i < NUM_OF_SQUIRRELS; i++) {
+			//The squirrels position must be converted back to screen coordinates
+			enemies.add(new Squirrel(ScreenInfo.toScreenCoordinate(getSpawn().x), 
+					ScreenInfo.toScreenCoordinate(getSpawn().y), getGoal(), getPath()));
+		}
+		
 		setEnemies(enemies);
 	}
 }

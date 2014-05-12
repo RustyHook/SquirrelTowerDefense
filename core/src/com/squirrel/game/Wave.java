@@ -15,7 +15,7 @@ import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 
 public abstract class Wave {
-	static final long spawnTimer = 750000000;
+	static final long spawnTimer = 500000000;
 	
 	private Array<Enemy> enemies;
 	private Array<Enemy> spawnedEnemies;

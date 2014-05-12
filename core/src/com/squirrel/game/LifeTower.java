@@ -12,7 +12,7 @@ import com.badlogic.gdx.utils.Array;
 
 public class LifeTower extends Tower {
 	//Change these values for balancing
-	static final int COST = 50;
+	static final int COST = 75;
 	static final float DAMAGE = 0;
 	static final float RANGE = 0;
 	static final float ATTACK_RATE = 0;

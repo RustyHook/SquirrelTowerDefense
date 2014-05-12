@@ -73,9 +73,9 @@ public class GameScreen implements Screen {
 	SelectBox<String> structureSelect;
 	TextButton nextButton;
 	String[] structureList = {"Stick Tower (15)", 
-			"Buff Tower (25)", 
+			"Buff Tower (35)", 
 			"Life Tower (50)", 
-			"Resource Tower (50)", 
+			"Resource Tower (75)", 
 			"Stick Trap (2)",  
 			"Professor Max (200)"};
 
@@ -89,7 +89,7 @@ public class GameScreen implements Screen {
 	boolean waveInProgress;
 	TiledMapTileLayer mainLayer;
 	Player player;
-	Label stoneDisplay, woodDisplay, lifeDisplay, errorMessage;
+	Label stoneDisplay, woodDisplay, lifeDisplay, errorMessage, waveOutput;
 	Vector2 spawn;
 	Vector2 goal;
 	Structure selectedStructure;
@@ -198,7 +198,7 @@ public class GameScreen implements Screen {
 	    });
 	    
 	    deleteButton.sizeBy(20, 20);
-	    deleteButton.setX(stage.getWidth() / 2);
+	    deleteButton.setX((stage.getWidth() - deleteButton.getWidth()) / 2);
 	    deleteButton.setVisible(false);
 	    
 	    table = new Table();
@@ -223,10 +223,13 @@ public class GameScreen implements Screen {
 	    stoneDisplay.setY(woodDisplay.getY() - stoneDisplay.getHeight());
 	    table.addActor(stoneDisplay);
 	    
-	    errorMessage = new Label(waves.peek().getMessage(), skin);
-		errorMessage.setX((stage.getWidth() - errorMessage.getWidth())/2);
-	    errorMessage.setY(woodDisplay.getY() + errorMessage.getHeight());
-		errorMessage.setVisible(true);
+	    waveOutput = new Label(waves.peek().getMessage(), skin);
+	    waveOutput.setY(stage.getHeight() - waveOutput.getHeight());
+	    
+	    errorMessage = new Label("Errors Go Here", skin);
+	    errorMessage.setVisible(false);
+		
+		table.addActor(waveOutput);
 	    table.addActor(errorMessage);
 	    
 	    //Set wave one message to show
@@ -251,10 +254,8 @@ public class GameScreen implements Screen {
 				waveInProgress = false;
 				player.addWood(currentWave.getWoodReward());
 				Label temp = new Label(waves.peek().getMessage(), skin);
-				errorMessage.setText(waves.peek().getMessage());
-				errorMessage.setX((stage.getWidth() - temp.getWidth())/2);
-			    errorMessage.setY(woodDisplay.getY() + errorMessage.getHeight());
-				errorMessage.setVisible(true);
+				waveOutput.setText(waves.peek().getMessage());
+				waveOutput.setVisible(true);
 			}
 		} else if (waveInProgress) {
 			currentWave.updateMap(mainLayer);
@@ -352,6 +353,14 @@ public class GameScreen implements Screen {
 			case "Life Tower ("+LifeTower.COST+")": spawnTower(xPos, yPos, new LifeTower(structX, structY, enemies));
 				break;
 			case "Resource Tower ("+ResourceTower.COST+")": spawnTower(xPos, yPos, new ResourceTower(structX, structY, enemies));
+				String[] update =  {"Stick Tower (15)", 
+						"Buff Tower (35)", 
+						"Life Tower (50)", 
+						"Stick Trap (2)",  
+						"Professor Max (200)"};
+			structureList = update;
+			structureSelect.setItems(structureList);
+
 				break;
 			case "Stick Trap ("+StickTrap.COST+")": spawnTrap(xPos, yPos, new StickTrap(structX, structY, enemies));
 				break;
@@ -393,8 +402,6 @@ public class GameScreen implements Screen {
 		if(player.getWood() < tower.getCost()){
 			Label temp = new Label("Insufficient Wood: Cannot Build Tower", skin);
 			errorMessage.setText("Insufficient Wood: Cannot Build Tower");
-			errorMessage.setX((stage.getWidth() - temp.getWidth())/2);
-			errorMessage.setY(woodDisplay.getY() + errorMessage.getHeight());
 			errorMessage.setVisible(true);
 			mainLayer.setCell(ScreenInfo.toMapCoordinate(x), ScreenInfo.toMapCoordinate(y), oldCell);
 		}
@@ -404,8 +411,6 @@ public class GameScreen implements Screen {
 				new Vector2(ScreenInfo.toMapCoordinate(GOAL_X), ScreenInfo.toMapCoordinate(GOAL_Y))) == null){
 			Label temp = new Label("Cannot build tower: You must leave the squirrels a path!", skin);
 			errorMessage.setText("Cannot build tower: You must leave the squirrels a path!");
-			errorMessage.setX((stage.getWidth() - temp.getWidth())/2);
-		    errorMessage.setY(woodDisplay.getY() + errorMessage.getHeight());
 			errorMessage.setVisible(true);
 			mainLayer.setCell(ScreenInfo.toMapCoordinate(x), ScreenInfo.toMapCoordinate(y), oldCell);
 			return;

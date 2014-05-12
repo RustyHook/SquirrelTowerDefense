@@ -12,12 +12,13 @@ import com.badlogic.gdx.utils.Array;
 
 public class WaveFour extends Wave {
 	//Change these for balancing
-	static final int NUM_OF_CHICK_SQUIRRELS = 10;
-	static final int WOOD_REWARD = 100;
+	static final int NUM_OF_CHICK_SQUIRRELS = 20;
+	static final int NUM_OF_WILD_SQUIRRELS = 10;
+	static final int WOOD_REWARD = 20;
 	static final int STONE_REWARD = 10;
-	static final String MESSAGE = "Wave 4: "+NUM_OF_CHICK_SQUIRRELS+" squirrels who ate" +
-			"chickfila with"+ChickfilASquirrel.HEALTH + " health";
-
+	static final String MESSAGE = "Wave 4: "
+			+NUM_OF_CHICK_SQUIRRELS+" Squirrels that ate"+" Chick-Fil-A (HP: "+ChickfilASquirrel.HEALTH + ") and"
+			+NUM_OF_WILD_SQUIRRELS+ " Wild Squirrels (HP: "+WildSquirrel.HEALTH + ")";
 	/**
 	 * Constructs an object representing the first wave
 	 * @param mapLayer The map layer the enemies will move on
@@ -39,6 +40,11 @@ public class WaveFour extends Wave {
 		for (int i = 0; i < NUM_OF_CHICK_SQUIRRELS; i++) {
 			//The squirrels position must be converted back to screen coordinates
 			enemies.add(new ChickfilASquirrel(ScreenInfo.toScreenCoordinate(getSpawn().x), 
+					ScreenInfo.toScreenCoordinate(getSpawn().y), getGoal(), getPath()));
+		}
+		for (int i = 0; i < NUM_OF_WILD_SQUIRRELS; i++) {
+			//The squirrels position must be converted back to screen coordinates
+			enemies.add(new WildSquirrel(ScreenInfo.toScreenCoordinate(getSpawn().x), 
 					ScreenInfo.toScreenCoordinate(getSpawn().y), getGoal(), getPath()));
 		}
 		setEnemies(enemies);

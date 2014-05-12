@@ -16,8 +16,8 @@ import com.badlogic.gdx.utils.Array;
 
 public class ChickfilASquirrel extends Enemy {
 	//Change these values for balancing
-	static final float SPEED = 70*2;
-	static final float HEALTH = 35;
+	static final float SPEED = 80*2;
+	static final float HEALTH = 50;
 	static final int REWARD = 5;
 	static final FileHandle IMAGE = Gdx.files.internal("squirrel.png");
 	

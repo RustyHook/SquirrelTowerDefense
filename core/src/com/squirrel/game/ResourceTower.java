@@ -1,9 +1,6 @@
 /**
- * A tower that increases the the amount of resources per squirrel killed by 100%.
- * This stacks additively. 
- * For example:
- * 1 Resource Tower and 1 Squirrel worth 5 resources = 10
- * 2 Resource Tower and 1 Squirrel worth 5 resources = 15
+ * A tower that doubles the the amount of resources per squirrel killed.
+ * THIS TOWER CAN ONLY BE PLACED ONCE. REMOVING IT DOES NOT CHANGE THAT.
  */
 
 package com.squirrel.game;
@@ -16,7 +13,7 @@ import com.badlogic.gdx.utils.Array;
 
 public class ResourceTower extends Tower {
 	//Change these values for balancing
-	static final int COST = 50;
+	static final int COST = 75;
 	static final float DAMAGE = 0;
 	static final float RANGE = 0;
 	static final float ATTACK_RATE = 0;
@@ -34,6 +31,6 @@ public class ResourceTower extends Tower {
 		super(new Sprite(new Texture(TOWER_IMAGE)), x, y, COST, DAMAGE, RANGE, 
 				ATTACK_RATE, PROJECTILE_SPEED,
 				new Sprite(new Texture(PROJECTILE_IMAGE)), possibleTargets);
-		GameScreen.resourceMultiplier = (GameScreen.resourceMultiplier+4)/2;
+		GameScreen.resourceMultiplier++;
 	}
 }

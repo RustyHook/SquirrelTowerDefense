@@ -14,7 +14,7 @@ import com.badlogic.gdx.utils.Array;
 
 public class BuffTower extends Tower {
 	//Change these values for balancing
-	static final int COST = 25;
+	static final int COST = 35;
 	static final float DAMAGE = 0;
 	static final float RANGE = 0;
 	static final float ATTACK_RATE = 0;

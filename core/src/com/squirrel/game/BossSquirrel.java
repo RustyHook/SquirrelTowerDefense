@@ -16,7 +16,7 @@ import com.badlogic.gdx.utils.Array;
 
 public class BossSquirrel extends Enemy {
 	//Change these values for balancing
-	static final float SPEED = 10*2;
+	static final float SPEED = 100*2;
 	static final float HEALTH = 100;
 	static final int REWARD = 5;
 	static final FileHandle IMAGE = Gdx.files.internal("squirrel.png");

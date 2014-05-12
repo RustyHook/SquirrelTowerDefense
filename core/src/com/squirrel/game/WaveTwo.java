@@ -14,10 +14,11 @@ public class WaveTwo extends Wave {
 	//Change these for balancing
 	static final int NUM_OF_SQUIRRELS = 10;
 	static final int NUM_OF_WILD_SQUIRRELS = 10;
-	static final int WOOD_REWARD = 100;
+	static final int WOOD_REWARD = 50;
 	static final int STONE_REWARD = 10;
-	static final String MESSAGE = "Wave 2: "+NUM_OF_SQUIRRELS+" squirrels with"+Squirrel.HEALTH + 
-			" health " + NUM_OF_WILD_SQUIRRELS + " wild squirrels with " + WildSquirrel.HEALTH + " health";
+	static final String MESSAGE = "Wave 2: "
+			+NUM_OF_SQUIRRELS+" Squirrels (HP: "+Squirrel.HEALTH + ") and " 
+			+NUM_OF_WILD_SQUIRRELS + " Wild Squirrels (HP:" + WildSquirrel.HEALTH + ")";
 
 	/**
 	 * Constructs an object representing the first wave

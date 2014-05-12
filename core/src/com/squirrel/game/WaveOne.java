@@ -15,7 +15,8 @@ public class WaveOne extends Wave {
 	static final int NUM_OF_SQUIRRELS = 10;
 	static final int WOOD_REWARD = 100;
 	static final int STONE_REWARD = 10;
-	static final String MESSAGE = "Wave 1: "+NUM_OF_SQUIRRELS+" squirrels with"+Squirrel.HEALTH + " health";
+	static final String MESSAGE = "Wave 1: "
+			+NUM_OF_SQUIRRELS+" Squirrels (HP: "+Squirrel.HEALTH + ")";
 
 	/**
 	 * Constructs an object representing the first wave
