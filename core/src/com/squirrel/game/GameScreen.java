@@ -143,7 +143,6 @@ public class GameScreen implements Screen {
 	    structureSelect.sizeBy(150, 5);
 	    structureSelect.setX(stage.getWidth()-structureSelect.getWidth());	// USE TO CHANGE THE LOCATION OF THE SELECT BOX
 	    structureSelect.setY(stage.getHeight()-structureSelect.getHeight());
-	    
 	     
 	    //Creates the "Next Wave" button
 	    nextButton = new TextButton("Next Wave", skin);
@@ -157,6 +156,7 @@ public class GameScreen implements Screen {
 	    		}
 	    	}
 	    });
+	    
 	    nextButton.sizeBy(20, 20);
 	    nextButton.setX(stage.getWidth()-nextButton.getWidth());
 	    
@@ -188,7 +188,10 @@ public class GameScreen implements Screen {
 	    errorMessage.setVisible(false);
 	    table.addActor(errorMessage);
 	    
-
+	    //Set wave one message to show
+	    errorMessage.setText(waves.peek().getMessage());
+		errorMessage.setX((stage.getWidth() - errorMessage.getWidth())/2);
+		errorMessage.setVisible(true);
 	}
 
 	@Override
@@ -203,10 +206,15 @@ public class GameScreen implements Screen {
 		
 		//Determine if wave is over
 		if (waveInProgress && currentWave.isOver()) {
-			waveInProgress = false;
-			player.addWood(currentWave.getWoodReward());
+			//End game if it is over
 			if (waves.size == 0) {
 				game.setScreen(new StartMenuScreen(game));
+			} else {
+				waveInProgress = false;
+				player.addWood(currentWave.getWoodReward());
+				errorMessage.setText(waves.peek().getMessage());
+				errorMessage.setX((stage.getWidth() - errorMessage.getWidth())/2);
+				errorMessage.setVisible(true);
 			}
 		} else if (waveInProgress) {
 			currentWave.updateMap(mainLayer);
@@ -309,8 +317,6 @@ public class GameScreen implements Screen {
 		} else if (cell.getTile().getProperties().containsKey("structure")) {	
 			Structure struct = (Structure) cell.getTile().getProperties().get("structure");
 		}
-
-		
 	}
 	
 	/**
