@@ -14,6 +14,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
@@ -119,11 +120,23 @@ public abstract class Enemy extends Sprite implements Movable {
 		setY(getY() + velocity.y * delta);
 	}
 	
+	/**
+	 * Updates the squirrels path
+	 * @param mapLayer Layer of a map the squirrel is traveling on
+	 */
 	public void updatePath(TiledMapTileLayer mapLayer) {
 		Vector2 currentPosition = new Vector2 (
 				ScreenInfo.toMapCoordinate(getX()),
 				ScreenInfo.toMapCoordinate(getY()));
 		setPath(new PathFinder(mapLayer).findShortestPath(currentPosition, goal));
+		
+		//If the next cell would be blocked, update the next position
+		Cell cell = mapLayer.getCell(ScreenInfo.toMapCoordinate(next.x),
+				ScreenInfo.toMapCoordinate(next.y));
+		if (cell != null && (cell.getTile()
+				.getProperties().containsKey("blocked")) && path.size() > 0) {
+			next = path.peek();
+		}
 	}
 	
 	/**
