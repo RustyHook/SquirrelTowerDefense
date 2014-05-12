@@ -9,19 +9,27 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Button;
 import com.badlogic.gdx.scenes.scene2d.ui.Button.ButtonStyle;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener.ChangeEvent;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.scenes.scene2d.utils.Selection;
 import com.badlogic.gdx.scenes.scene2d.utils.TextureRegionDrawable;
+import com.badlogic.gdx.utils.Scaling;
 
 public class StartMenuScreen implements Screen {
 
@@ -38,9 +46,13 @@ public class StartMenuScreen implements Screen {
 	    Gdx.input.setInputProcessor(stage);
 
 	    Table table = new Table();
-	    table.setFillParent(true);
+	    //table.setFillParent(true);
 	    stage.addActor(table);
+	    table.debug();
+	    
+		Skin skin = new Skin(Gdx.files.internal("defaultskin.json"));
 
+		/*
 	    //CREATE BUTTONS IMAGES WHEN PRESSED DOWN AND UP
 	    TextureRegionDrawable upRegion = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("wall.png"))));
 	    TextureRegionDrawable downRegion = new TextureRegionDrawable(new TextureRegion(new Texture(Gdx.files.internal("Trap.png"))));
@@ -49,21 +61,32 @@ public class StartMenuScreen implements Screen {
 	    ButtonStyle style = new ButtonStyle();
 	    style.up = upRegion;
 	    style.down = downRegion;
-	    
+
 	    //Create button with style and add it to the stage!
 	    Button button = new Button(style);
-	    button.setX(stage.getWidth()/2);	//Centers the button
-	    button.setY(stage.getHeight()/2);
-	    stage.addActor(button);
-	    
-	    
-	    /*
+		 */
+
+		TextureRegion background = new TextureRegion(new Texture(Gdx.files.internal("level1final.png")));
+		Image image = new Image(background);
+		image.setWidth(800);
+		image.setHeight(480);
+
+		table.addActor(image);
+
+		
+		TextButton playButton = new TextButton("Play", skin);
+		playButton.sizeBy(50, 25);
+		playButton.setX((stage.getWidth()-playButton.getWidth())/2);	//Centers the button
+		playButton.setY((stage.getHeight()-playButton.getHeight())/2);
+		table.addActor(playButton);
+
+		/*
 	    //Creates a SelectBox that displays the Array.
 	    String[] array = new String[3];
 	    array[0] = "ZERO";
 	    array[1] = "ONE";
 	    array[2] = "TWO";
-	    
+
 	    Skin skin = new Skin(Gdx.files.internal("defaultskin.json"));
 
 	    SelectBox<String> selectBox = new SelectBox<String>(skin);
@@ -75,11 +98,12 @@ public class StartMenuScreen implements Screen {
 	    */
 	    
 	    //Give the button a listener!
-	    button.addListener(new ClickListener() {
+	    playButton.addListener(new ClickListener() {
 	    	public void clicked(InputEvent event, float x, float y) {
 	    		game.setScreen(new GameScreen(game));
 	    	}
 	    });
+
 	    
 	}
 
