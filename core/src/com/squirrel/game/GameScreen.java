@@ -208,18 +208,20 @@ public class GameScreen implements Screen {
 	    
 	    lifeDisplay = new Label("Lives: " + player.getLives(), skin);
 	    lifeDisplay.setX((stage.getWidth() - lifeDisplay.getWidth())/2);
-	    lifeDisplay.setY((stage.getHeight() - nextButton.getHeight()) - 20);
+	    lifeDisplay.setY((stage.getHeight() - lifeDisplay.getHeight()) -10);
 	    table.addActor(lifeDisplay);
 	    
-	    woodDisplay = new Label("Wood: " + player.getWood(), skin);
-	    woodDisplay.setX((stage.getWidth() - lifeDisplay.getWidth())/2);
-	    woodDisplay.setY(nextButton.getHeight() + 50);
+	    woodDisplay = new Label("Wood: " + player.getWood() + "", skin);
+	    woodDisplay.setX((stage.getWidth() - woodDisplay.getWidth())/2);
+	    woodDisplay.setY((lifeDisplay.getY() - woodDisplay.getHeight()));
 	    table.addActor(woodDisplay);
 	    
+	    /*
 	    stoneDisplay = new Label("Stone: " + player.getStone() + "", skin);
 	    stoneDisplay.setX((stage.getWidth() - stoneDisplay.getWidth())/2);
 	    stoneDisplay.setY(woodDisplay.getY() - stoneDisplay.getHeight());
 	    table.addActor(stoneDisplay);
+	     */
 	    
 	    waveOutput = new Label(waves.peek().getMessage(), skin);
 	    waveOutput.setY(stage.getHeight() - waveOutput.getHeight());
@@ -312,8 +314,7 @@ public class GameScreen implements Screen {
 		
 		lifeDisplay.setText("Lives: " + player.getLives());
 		woodDisplay.setText("Wood: " + player.getWood());
-		stoneDisplay.setText("Stone: " + player.getStone());
-		
+		//stoneDisplay.setText("Stone: " + player.getStone());
 		
 	}
 
