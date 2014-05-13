@@ -14,6 +14,7 @@ package com.squirrel.game;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -94,6 +95,9 @@ public class GameScreen implements Screen {
 	Vector2 goal;
 	Structure selectedStructure;
 	
+	Sound waveAudio;
+	Sound needMoreAudio;
+	
 	public GameScreen(Game game) {
 		this.game = game;
 		if(StartMenuScreen.difficulty.getSelection().toString().equals("{Normal (100 Lives)}")){
@@ -123,6 +127,10 @@ public class GameScreen implements Screen {
 		trapImage = new Texture(Gdx.files.internal("Trap.png"));
 		mapImage = new Texture(Gdx.files.internal("level1final.png"));
 		
+	    //Setup audio
+//	    waveAudio = Gdx.audio.newSound(Gdx.files.internal("waveClip.wav"));
+//	    needMoreAudio = Gdx.audio.newSound(Gdx.files.internal("resourcesClip.wav"));
+	    
 		//Setup camera, will be static for this game
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, ScreenInfo.WIDTH, ScreenInfo.HEIGHT);
@@ -173,6 +181,7 @@ public class GameScreen implements Screen {
 	    			waveInProgress = true;
 	    			enemies = currentWave.getSpawnedEnemies();
 	    			errorMessage.setVisible(false);
+//	    			 waveAudio.play();
 	    		}
 	    	}
 	    });
@@ -240,8 +249,6 @@ public class GameScreen implements Screen {
 		
 		table.addActor(waveOutput);
 	    table.addActor(errorMessage);
-	    
-	    //Set wave one message to show
 	}
 
 	@Override
@@ -412,6 +419,7 @@ public class GameScreen implements Screen {
 		if(player.getWood() < tower.getCost()){
 			errorMessage.setText("Insufficient Wood: Cannot Build Tower");
 			errorMessage.setVisible(true);
+//			needMoreAudio.play();
 			mainLayer.setCell(ScreenInfo.toMapCoordinate(x), ScreenInfo.toMapCoordinate(y), oldCell);
 		}
 
@@ -445,6 +453,7 @@ public class GameScreen implements Screen {
 		if (player.getWood() < trap.getCost()) {
 			errorMessage.setText("Insufficient Wood: Cannot Build Trap");
 			errorMessage.setVisible(true);
+//			needMoreAudio.play();
 			return;
 		}
 		else if(cell != null && cell.getTile().getProperties().containsKey("trap")){
