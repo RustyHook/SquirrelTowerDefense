@@ -16,7 +16,10 @@ import com.badlogic.gdx.Game;
 
 public class SquirrelDefenseGame extends Game {
         @Override
-        public void create() {               
-                this.setScreen(new StartMenuScreen(this));
+        public void create() {            
+        		this.setScreen(new SplashScreen(this));
+                //this.setScreen(new StartMenuScreen(this));
         }
+        
+        
 }
