@@ -76,8 +76,8 @@ public class GameScreen implements Screen {
 			"Buff Tower (35)", 
 			"Life Tower (50)", 
 			"Resource Tower (75)", 
-			"Stick Trap (2)",  
-			"Professor Max (200)"};
+			"Stick Trap (5)",  
+			"Professor Max (500)"};
 
 	TextButton deleteButton;
 	
@@ -253,7 +253,6 @@ public class GameScreen implements Screen {
 			} else {
 				waveInProgress = false;
 				player.addWood(currentWave.getWoodReward());
-				Label temp = new Label(waves.peek().getMessage(), skin);
 				waveOutput.setText(waves.peek().getMessage());
 				waveOutput.setVisible(true);
 			}
@@ -400,7 +399,6 @@ public class GameScreen implements Screen {
 		//If not enough resources OR
 		//If no path exists to the goal, do not build the tower.
 		if(player.getWood() < tower.getCost()){
-			Label temp = new Label("Insufficient Wood: Cannot Build Tower", skin);
 			errorMessage.setText("Insufficient Wood: Cannot Build Tower");
 			errorMessage.setVisible(true);
 			mainLayer.setCell(ScreenInfo.toMapCoordinate(x), ScreenInfo.toMapCoordinate(y), oldCell);
@@ -409,7 +407,6 @@ public class GameScreen implements Screen {
 		else if(pathFinder.findShortestPath(
 				new Vector2(ScreenInfo.toMapCoordinate(SPAWN_X), ScreenInfo.toMapCoordinate(SPAWN_Y)), 
 				new Vector2(ScreenInfo.toMapCoordinate(GOAL_X), ScreenInfo.toMapCoordinate(GOAL_Y))) == null){
-			Label temp = new Label("Cannot build tower: You must leave the squirrels a path!", skin);
 			errorMessage.setText("Cannot build tower: You must leave the squirrels a path!");
 			errorMessage.setVisible(true);
 			mainLayer.setCell(ScreenInfo.toMapCoordinate(x), ScreenInfo.toMapCoordinate(y), oldCell);
@@ -434,8 +431,12 @@ public class GameScreen implements Screen {
 		//or there is already a trap in this cell
 		Cell cell = mainLayer.getCell(ScreenInfo.toMapCoordinate(x), 
 				ScreenInfo.toMapCoordinate(y));
-		if (player.getWood() < trap.getCost() || (cell != null &&
-				cell.getTile().getProperties().containsKey("trap"))) {
+		if (player.getWood() < trap.getCost()) {
+			errorMessage.setText("Insufficient Wood: Cannot Build Trap");
+			errorMessage.setVisible(true);
+			return;
+		}
+		else if(cell != null && cell.getTile().getProperties().containsKey("trap")){
 			return;
 		}
 		
@@ -450,6 +451,7 @@ public class GameScreen implements Screen {
 		//Update game stuff
 		traps.add(trap);
 		player.decreaseWood(trap.getCost());
+		errorMessage.setVisible(false);
 	}
 	
 	@Override

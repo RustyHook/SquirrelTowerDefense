@@ -12,7 +12,7 @@ import com.badlogic.gdx.utils.Array;
 
 public class MaxTower extends Tower {
 	//Change these values for balancing
-	static final int COST = 200;
+	static final int COST = 500;
 	static final float DAMAGE = 99;
 	static final float RANGE = 999;
 	static final float ATTACK_RATE = 99;

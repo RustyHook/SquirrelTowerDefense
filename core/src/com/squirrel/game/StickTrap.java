@@ -9,8 +9,8 @@ import com.badlogic.gdx.utils.Array;
 public class StickTrap extends Trap {
 
 	//Change these for balancing
-	static final float DAMAGE = 10f;
-	static final int COST = 2;
+	static final float DAMAGE = 5f;
+	static final int COST = 5;
 	static final FileHandle TRAP_IMAGE = Gdx.files.internal("Trap.png");
 	
 	public StickTrap(float x, float y, Array<Enemy> enemies) {
