@@ -8,10 +8,15 @@ public class Player {
 	private int stone;
 	private int lives;
 	
-	public Player () {
-		this.wood = STARTING_WOOD;
+	public Player() {
+		if(GameScreen.difficulty == 100)
+			this.wood = 150;
+		else if(GameScreen.difficulty == 20)
+			this.wood = 150;
+		else if(GameScreen.difficulty == 1)
+			this.wood = 100;
 		this.stone = 0;
-		this.lives = STARTING_LIVES;
+		this.lives = GameScreen.difficulty;
 	}
 
 
