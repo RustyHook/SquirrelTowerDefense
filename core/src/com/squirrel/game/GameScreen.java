@@ -141,8 +141,6 @@ public class GameScreen implements Screen {
 		waves.add(new WaveThree(mainLayer, player, spawn, goal));
 		waves.add(new WaveTwo(mainLayer, player, spawn, goal));
 		waves.add(new WaveOne(mainLayer, player, spawn, goal));
-			
-		//TODO waves.add(wave2, wave 3, wave 4... so on...
 		waveInProgress = false;
 		
 		//Setup the renderer

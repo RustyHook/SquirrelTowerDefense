@@ -21,6 +21,7 @@ public class BuffTower extends Tower {
 	static final float PROJECTILE_SPEED = 0;
 	static final FileHandle TOWER_IMAGE = Gdx.files.internal("BuffTower.png");
 	static final FileHandle PROJECTILE_IMAGE = Gdx.files.internal("Projectile.png");
+	static final String FILE_NAME = "standardTower.atlas";
 	
 	/**
 	 * Constructs a new basic tower
@@ -31,7 +32,7 @@ public class BuffTower extends Tower {
 	public BuffTower(float x, float y, Array<Enemy> possibleTargets) {
 		super(new Sprite(new Texture(TOWER_IMAGE)), x, y, COST, DAMAGE, RANGE, 
 				ATTACK_RATE, PROJECTILE_SPEED,
-				new Sprite(new Texture(PROJECTILE_IMAGE)), possibleTargets);
+				new Sprite(new Texture(PROJECTILE_IMAGE)), possibleTargets, FILE_NAME);
 		GameScreen.damageMultiplier = (GameScreen.damageMultiplier+2)/2;
 	}
 }

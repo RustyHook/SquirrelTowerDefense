@@ -20,6 +20,7 @@ public class BossSquirrel extends Enemy {
 	static final float HEALTH = 100;
 	static final int REWARD = 5;
 	static final FileHandle IMAGE = Gdx.files.internal("squirrel.png");
+	static final String fileName = "bossSquirrel.atlas";
 	
 	/**
 	 * Constructs a new squirrel with a sprite, x and y coordinates, and
@@ -35,6 +36,6 @@ public class BossSquirrel extends Enemy {
 	 */
 	public BossSquirrel(int x, int y, Vector2 spawn, Vector2 goal, Array<Vector2> path) {
 		super(new Sprite(new Texture(IMAGE)), x, y, HEALTH, SPEED, REWARD, spawn,
-				goal, path);
+				goal, path, fileName);
 	}
 }

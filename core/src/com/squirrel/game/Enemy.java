@@ -17,6 +17,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.math.Vector2;
@@ -38,14 +39,10 @@ public abstract class Enemy extends Sprite implements Movable{
 	private Vector2 goal;
 	private Vector2 spawn;
 	
-	//Added to test animation
-	private SpriteBatch batch1;
+	//For animation
 	private TextureAtlas textureAtlas;
 	private Animation animation;
 	private float elapsedTime = 0;
-	private float x = 0;
-	private float y = 120;
-	private boolean isAnimated = false;
 	
 	/**
 	 * Constructs a new enemy with a sprite, x and y coordinates, and
@@ -59,36 +56,46 @@ public abstract class Enemy extends Sprite implements Movable{
 	 * @param y Y coordinate
 	 * @param path Path the enemy will follow in reverse order
 	 */
-	public Enemy(Sprite sprite, int x, int y, float health, float speed, int reward,
-			Vector2 spawn, Vector2 goal, Array<Vector2> path) {
-		super(sprite);
-		
-		//Set the x and y position using the Sprite methods
-		setX(x);
-		setY(y);
-		
-		this.health = health;
-		this.speed = speed;
-		this.setReward(reward);
-		this.goal = goal;
-		this.spawn = spawn;
-		
-		velocity = new Vector2();
-		this.path = new Stack<Vector2>();
-		
-		//Get the path ready to be traveled
-		setPath(path);
-		next = path.peek();
-		reachedGoal = false;
-	}
-	
+//	public Enemy(Sprite sprite, int x, int y, float health, float speed, int reward,
+//			Vector2 spawn, Vector2 goal, Array<Vector2> path) {
+//		super(sprite);
+//		
+//		//Set the x and y position using the Sprite methods
+//		setX(x);
+//		setY(y);
+//		
+//		this.health = health;
+//		this.speed = speed;
+//		this.setReward(reward);
+//		this.goal = goal;
+//		this.spawn = spawn;
+//		
+//		velocity = new Vector2();
+//		this.path = new Stack<Vector2>();
+//		
+//		//Get the path ready to be traveled
+//		setPath(path);
+//		next = path.peek();
+//		reachedGoal = false;
+//	}
+
+	/**
+	 * Constructs a new enemy with a sprite, x and y coordinates, and
+	 * a path to follow. The path will be traveled in the reverse of the 
+	 * order that it is passed in.  
+	 * PRECONDITIONS: The x and y coordinates should be within the map the 
+	 * enemy will be drawn to. The path should contain vectors that are
+	 * in the map as well. If not, an exception will be thrown
+	 * @param sprite Sprite representing the enemy
+	 * @param x X coordinate
+	 * @param y Y coordinate
+	 * @param path Path the enemy will follow in reverse order
+	 * @param fileName Name of file the sprite sheet is stored in
+	 */
 	public Enemy(Sprite sprite, int x, int y, float health, float speed, int reward,
 			Vector2 spawn, Vector2 goal, Array<Vector2> path, String fileName) {
 		super(sprite);
 		
-		isAnimated = true;
-
-		batch1 = new SpriteBatch();
 		textureAtlas = new TextureAtlas(Gdx.files.internal(fileName));
 		animation = new Animation(1/30f, textureAtlas.getRegions());
 
@@ -116,22 +123,10 @@ public abstract class Enemy extends Sprite implements Movable{
 		//Update the enemy based off the time between 
 		//this frame and the last frame
 		update(Gdx.graphics.getDeltaTime());
-		
-		//For animated sprites
-		if(isAnimated){
-			batch1.begin();
-
-			elapsedTime += Gdx.graphics.getDeltaTime();
-
-			batch1.draw(animation.getKeyFrame(elapsedTime, true), x, y);
-			batch1.end();
-		}
-        
-		//Static sprites 
 		super.draw(batch);
 		
 	}
-	
+
 	/**
 	 * Updates the health, path, velocity, and position
 	 * of the enemy
@@ -174,9 +169,11 @@ public abstract class Enemy extends Sprite implements Movable{
 
 		//Update position
 		setX(getX() + velocity.x * delta);
-		x = x + velocity.x * delta;
 		setY(getY() + velocity.y * delta);
-		y = y + velocity.y * delta;
+
+		//Update animation
+		elapsedTime += Gdx.graphics.getDeltaTime();
+		setRegion(animation.getKeyFrame(elapsedTime, true));
 	}
 	
 	/**

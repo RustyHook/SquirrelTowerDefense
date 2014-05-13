@@ -37,13 +37,9 @@ public abstract class Tower extends Structure {
 	private Sprite projectileSprite;
 	
 	//Animation for tower
-	private SpriteBatch batch1;
 	private TextureAtlas textureAtlas;
 	private Animation animation;
 	private float elapsedTime = 0;
-	private float x;
-	private float y;
-	private boolean isAnimated = false;
 	
 	/**
 	 * Constructs a new tower
@@ -58,34 +54,42 @@ public abstract class Tower extends Structure {
 	 * @param projectileSprite The sprite to represent the projectiles graphically
 	 * @param possibleTargets Enemies that are on the map that the tower could shoot at 
 	 */
-	public Tower(Sprite sprite, float x, float y, int cost, float damage, float range, 
-			float attackRate, float projectileSpeed, Sprite projectileSprite, 
-			Array<Enemy> possibleTargets) {
-		super(sprite, x, y, cost);
-		
-		
-		this.damage = damage;
-		this.range = range;
-		this.attackRate = attackRate;
-		this.projectileSpeed = projectileSpeed;
-		this.projectileSprite = projectileSprite;
-		this.possibleTargets = possibleTargets;
-		hasTarget = false;
-		
-		projectiles = new Array<Projectile>();
-	}
-	
+//	public Tower(Sprite sprite, float x, float y, int cost, float damage, float range, 
+//			float attackRate, float projectileSpeed, Sprite projectileSprite, 
+//			Array<Enemy> possibleTargets) {
+//		super(sprite, x, y, cost);
+//		
+//		
+//		this.damage = damage;
+//		this.range = range;
+//		this.attackRate = attackRate;
+//		this.projectileSpeed = projectileSpeed;
+//		this.projectileSprite = projectileSprite;
+//		this.possibleTargets = possibleTargets;
+//		hasTarget = false;
+//		
+//		projectiles = new Array<Projectile>();
+//	}
+
+	/**
+	 * Constructs a new tower
+	 * @param sprite The sprite that will represent the tower graphically
+	 * @param x The x position of the tower
+	 * @param y The y position of the tower
+	 * @param cost The cost of the tower
+	 * @param damage The damage the tower does
+	 * @param range The range in which the tower can shoot
+	 * @param attackRate The rate at which the tower shoots
+	 * @param projectileSpeed The speed that the projectile travels at
+	 * @param projectileSprite The sprite to represent the projectiles graphically
+	 * @param possibleTargets Enemies that are on the map that the tower could shoot at 
+	 * @param fileName Name of file that holds the sprite sheet
+	 */
 	public Tower(Sprite sprite, float x, float y, int cost, float damage, float range, 
 			float attackRate, float projectileSpeed, Sprite projectileSprite, 
 			Array<Enemy> possibleTargets, String fileName) {
 		super(sprite, x, y, cost);
-		
-		this.x = x;
-		this.y = y;
-		
-		isAnimated = true;
 
-		batch1 = new SpriteBatch();
 		textureAtlas = new TextureAtlas(Gdx.files.internal(fileName));
 		animation = new Animation(1/30f, textureAtlas.getRegions());
 		
@@ -104,21 +108,10 @@ public abstract class Tower extends Structure {
 	public void draw(Batch batch) {
 		//Update the enemy based off the time between 
 		//the this frame and the last frame
-		update(Gdx.graphics.getDeltaTime(), batch);
-		
-		//For animated sprites
-		if(isAnimated){
-			batch1.begin();
-
-			elapsedTime += Gdx.graphics.getDeltaTime();
-
-			batch1.draw(animation.getKeyFrame(elapsedTime, true), x, y);
-			batch1.end();
-		}
-				
+		update(Gdx.graphics.getDeltaTime(), batch);	
 		super.draw(batch);
 	}
-	
+
 	/**
 	 * Updates the target and projectiles
 	 * @param delta Time step
@@ -151,7 +144,11 @@ public abstract class Tower extends Structure {
 			} else {
 				projectiles.get(i).draw(batch);
 			}
-		}		
+		}
+		
+		//Update animation
+		elapsedTime += Gdx.graphics.getDeltaTime();
+		setRegion(animation.getKeyFrame(elapsedTime, true));
 	}
 
 	/**
