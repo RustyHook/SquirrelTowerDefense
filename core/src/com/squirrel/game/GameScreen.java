@@ -250,8 +250,11 @@ public class GameScreen implements Screen {
 				game.setScreen(new StartMenuScreen(game));
 			} else {
 				waveInProgress = false;
+				
 				player.addWood(currentWave.getWoodReward());
+				Label temp = new Label(waves.peek().getMessage(), skin);
 				waveOutput.setText(waves.peek().getMessage());
+				waveOutput.setY(stage.getHeight() - temp.getHeight());
 				waveOutput.setVisible(true);
 			}
 		} else if (waveInProgress) {
@@ -289,7 +292,7 @@ public class GameScreen implements Screen {
 		 */
 		
 		//Try to create structure where touched
-		if (Gdx.input.isTouched()) {
+		if (Gdx.input.justTouched()) {
 			spawnStructure();
 		}
 
@@ -353,8 +356,8 @@ public class GameScreen implements Screen {
 				String[] update =  {"Stick Tower (15)", 
 						"Buff Tower (35)", 
 						"Life Tower (50)", 
-						"Stick Trap (2)",  
-						"Professor Max (200)"};
+						"Stick Trap (5)",  
+						"Professor Max (500)"};
 			structureList = update;
 			structureSelect.setItems(structureList);
 
@@ -461,6 +464,7 @@ public class GameScreen implements Screen {
 		projectileImage.dispose();
 		batch.dispose();
 		renderer.dispose();
+		stage.dispose();
 	}
 	
     @Override

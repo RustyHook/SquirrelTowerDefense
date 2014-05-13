@@ -19,8 +19,8 @@ public class WaveThree extends Wave {
 	static final int WOOD_REWARD = 20;
 	static final int STONE_REWARD = 10;
 	static final String MESSAGE = "Wave 3: "
-			+NUM_OF_ARCTIC_SQUIRRELS+" Artic Squirrels (HP: "+ArcticSquirrel.HEALTH+") "+ "and "
-			+NUM_OF_SQUIRRELS+ " Squirrels (HP: "+Squirrel.HEALTH+")"+ "and "
+			+NUM_OF_ARCTIC_SQUIRRELS+" Artic Squirrels (HP: "+ArcticSquirrel.HEALTH+")\n"
+			+NUM_OF_SQUIRRELS+ " Squirrels (HP: "+Squirrel.HEALTH+")"+ " and "
 			+NUM_OF_WILD_SQUIRRELS+ " Wild Squirrels (HP: "+WildSquirrel.HEALTH+")";
 
 	/**

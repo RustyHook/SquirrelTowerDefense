@@ -17,7 +17,7 @@ public class WaveFour extends Wave {
 	static final int WOOD_REWARD = 20;
 	static final int STONE_REWARD = 10;
 	static final String MESSAGE = "Wave 4: "
-			+NUM_OF_CHICK_SQUIRRELS+" Squirrels that ate"+" Chick-Fil-A (HP: "+ChickfilASquirrel.HEALTH + ") and"
+			+NUM_OF_CHICK_SQUIRRELS+" Squirrels that ate"+" Chick-Fil-A (HP: "+ChickfilASquirrel.HEALTH + ") and "
 			+NUM_OF_WILD_SQUIRRELS+ " Wild Squirrels (HP: "+WildSquirrel.HEALTH + ")";
 	/**
 	 * Constructs an object representing the first wave
