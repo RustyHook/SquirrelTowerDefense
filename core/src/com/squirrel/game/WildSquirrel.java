@@ -33,7 +33,8 @@ public class WildSquirrel extends Enemy {
 	 * @param y Y coordinate
 	 * @param squirrelPath Path the squirrel will follow in reverse order
 	 */
-	public WildSquirrel(int x, int y, Vector2 goal, Array<Vector2> path) {
-		super(new Sprite(new Texture(IMAGE)), x, y, HEALTH, SPEED, REWARD, goal, path);
+	public WildSquirrel(int x, int y,Vector2 spawn, Vector2 goal, Array<Vector2> path) {
+		super(new Sprite(new Texture(IMAGE)), x, y, HEALTH, SPEED, REWARD, spawn,
+				goal, path);
 	}
 }

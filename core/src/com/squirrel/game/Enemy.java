@@ -36,6 +36,7 @@ public abstract class Enemy extends Sprite implements Movable{
 	private boolean reachedGoal;
 	private boolean dead;
 	private Vector2 goal;
+	private Vector2 spawn;
 	
 	//Added to test animation
 	private SpriteBatch batch1;
@@ -59,7 +60,7 @@ public abstract class Enemy extends Sprite implements Movable{
 	 * @param path Path the enemy will follow in reverse order
 	 */
 	public Enemy(Sprite sprite, int x, int y, float health, float speed, int reward,
-			Vector2 goal, Array<Vector2> path) {
+			Vector2 spawn, Vector2 goal, Array<Vector2> path) {
 		super(sprite);
 		
 		//Set the x and y position using the Sprite methods
@@ -70,6 +71,7 @@ public abstract class Enemy extends Sprite implements Movable{
 		this.speed = speed;
 		this.setReward(reward);
 		this.goal = goal;
+		this.spawn = spawn;
 		
 		velocity = new Vector2();
 		this.path = new Stack<Vector2>();
@@ -81,7 +83,7 @@ public abstract class Enemy extends Sprite implements Movable{
 	}
 	
 	public Enemy(Sprite sprite, int x, int y, float health, float speed, int reward,
-			Vector2 goal, Array<Vector2> path, String fileName) {
+			Vector2 spawn, Vector2 goal, Array<Vector2> path, String fileName) {
 		super(sprite);
 		
 		isAnimated = true;
@@ -98,6 +100,7 @@ public abstract class Enemy extends Sprite implements Movable{
 		this.speed = speed;
 		this.setReward(reward);
 		this.goal = goal;
+		this.spawn = spawn;
 
 		velocity = new Vector2();
 		this.path = new Stack<Vector2>();

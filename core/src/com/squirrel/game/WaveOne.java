@@ -39,7 +39,7 @@ public class WaveOne extends Wave {
 		for (int i = 0; i < NUM_OF_SQUIRRELS; i++) {
 			//The squirrels position must be converted back to screen coordinates
 			enemies.add(new Squirrel(ScreenInfo.toScreenCoordinate(getSpawn().x), 
-					ScreenInfo.toScreenCoordinate(getSpawn().y), getGoal(), getPath()));
+					ScreenInfo.toScreenCoordinate(getSpawn().y), getSpawn(), getGoal(), getPath()));
 		}
 		setEnemies(enemies);
 	}
