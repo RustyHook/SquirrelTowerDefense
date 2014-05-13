@@ -263,5 +263,10 @@ public abstract class Enemy extends Sprite implements Movable{
 		return out;
 	}
 	
+	public void dispose() {
+		textureAtlas.dispose();
+		getTexture().dispose();
+	}
+	
 }
 

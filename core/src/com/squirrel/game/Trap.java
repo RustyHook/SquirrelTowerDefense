@@ -65,5 +65,7 @@ public abstract class Trap extends Structure {
 		return enemies;
 	}
 	
-	
+	public void dispose() {
+		getTexture().dispose();
+	}
 }

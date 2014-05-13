@@ -40,36 +40,6 @@ public abstract class Tower extends Structure {
 	private TextureAtlas textureAtlas;
 	private Animation animation;
 	private float elapsedTime = 0;
-	
-	/**
-	 * Constructs a new tower
-	 * @param sprite The sprite that will represent the tower graphically
-	 * @param x The x position of the tower
-	 * @param y The y position of the tower
-	 * @param cost The cost of the tower
-	 * @param damage The damage the tower does
-	 * @param range The range in which the tower can shoot
-	 * @param attackRate The rate at which the tower shoots
-	 * @param projectileSpeed The speed that the projectile travels at
-	 * @param projectileSprite The sprite to represent the projectiles graphically
-	 * @param possibleTargets Enemies that are on the map that the tower could shoot at 
-	 */
-//	public Tower(Sprite sprite, float x, float y, int cost, float damage, float range, 
-//			float attackRate, float projectileSpeed, Sprite projectileSprite, 
-//			Array<Enemy> possibleTargets) {
-//		super(sprite, x, y, cost);
-//		
-//		
-//		this.damage = damage;
-//		this.range = range;
-//		this.attackRate = attackRate;
-//		this.projectileSpeed = projectileSpeed;
-//		this.projectileSprite = projectileSprite;
-//		this.possibleTargets = possibleTargets;
-//		hasTarget = false;
-//		
-//		projectiles = new Array<Projectile>();
-//	}
 
 	/**
 	 * Constructs a new tower
@@ -140,6 +110,7 @@ public abstract class Tower extends Structure {
 		for (int i = 0; i < projectiles.size; i++) {
 			if (projectiles.get(i).reachedTarget()) {
 				target.takeDamage((int)(damage * GameScreen.damageMultiplier));
+//				projectiles.get(i).dispose();
 				projectiles.removeIndex(i);
 			} else {
 				projectiles.get(i).draw(batch);
@@ -238,4 +209,9 @@ public abstract class Tower extends Structure {
 		this.attackRate = attackRate;
 	}
 	
+	public void dispose() {
+		textureAtlas.dispose();
+		getTexture().dispose();
+		projectileSprite.getTexture().dispose();
+	}
 }

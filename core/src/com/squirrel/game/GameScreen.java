@@ -303,6 +303,7 @@ public class GameScreen implements Screen {
 			if (traps.get(i).isDestroyed()) {
 				(mainLayer).setCell(ScreenInfo.toMapCoordinate(traps.get(i).getX()),
 						ScreenInfo.toMapCoordinate(traps.get(i).getY()), null);
+				traps.get(i).dispose();
 				traps.removeIndex(i);
 			}
 		}
@@ -347,6 +348,7 @@ public class GameScreen implements Screen {
 			float structY = ScreenInfo.toMapCoordinate(yPos) * ScreenInfo.TILE_SIZE;		
 			
 			switch (structureChosen) {
+			
 			case "Stick Tower ("+StickTower.COST+")": spawnTower(xPos, yPos, new StickTower(structX, structY, enemies));
 				break;
 			case "Buff Tower ("+BuffTower.COST+")": spawnTower(xPos, yPos, new BuffTower(structX, structY, enemies));
@@ -359,18 +361,20 @@ public class GameScreen implements Screen {
 						"Life Tower (50)", 
 						"Stick Trap (5)",  
 						"Professor Max (500)"};
-			structureList = update;
-			structureSelect.setItems(structureList);
+				structureList = update;
+				structureSelect.setItems(structureList);
 
 				break;
 			case "Stick Trap ("+StickTrap.COST+")": spawnTrap(xPos, yPos, new StickTrap(structX, structY, enemies));
 				break;
 			case "Professor Max ("+MaxTower.COST+")": spawnTower(xPos, yPos, new MaxTower(structX, structY, enemies));
 				break;
-		}
+			}
 
-			//TODO WHAT IF PLAYER WANTS TO UPGRADE OR DELETE??	
+			//TODO WHAT IF PLAYER WANTS TO UPGRADE??	
 		} else if (cell.getTile().getProperties().containsKey("structure")) {	
+			errorMessage.setText("Tower selected");
+			errorMessage.setVisible(true);
 			selectedStructure = (Structure) cell.getTile().getProperties().get("structure");
 			deleteButton.setVisible(true);
 		}
@@ -387,6 +391,14 @@ public class GameScreen implements Screen {
 		//Create new structure and put it at that spot
 		Cell newCell = new Cell();
 		Cell oldCell = mainLayer.getCell(ScreenInfo.toMapCoordinate(x), ScreenInfo.toMapCoordinate(y));
+		
+		//Check if it on top of a trap
+		if (oldCell != null && oldCell.getTile().getProperties().containsKey("trap")) {
+			errorMessage.setText("Cannot build tower: Blocked by a trap");
+			errorMessage.setVisible(true);
+			return;
+		}
+		
 		TextureRegion region = new TextureRegion(tower.getTexture());
 		StaticTiledMapTile newTile = new StaticTiledMapTile(region);
 		newTile.getProperties().put("blocked", true);
@@ -401,7 +413,7 @@ public class GameScreen implements Screen {
 		//If not enough resources OR
 		//If no path exists to the goal, do not build the tower.
 		if(player.getWood() < tower.getCost()){
-			errorMessage.setText("Insufficient Wood: Cannot Build Tower");
+			errorMessage.setText("Cannot build tower: Insufficient wood");
 			errorMessage.setVisible(true);
 			mainLayer.setCell(ScreenInfo.toMapCoordinate(x), ScreenInfo.toMapCoordinate(y), oldCell);
 		}
@@ -409,7 +421,7 @@ public class GameScreen implements Screen {
 		else if(pathFinder.findShortestPath(
 				new Vector2(ScreenInfo.toMapCoordinate(SPAWN_X), ScreenInfo.toMapCoordinate(SPAWN_Y)), 
 				new Vector2(ScreenInfo.toMapCoordinate(GOAL_X), ScreenInfo.toMapCoordinate(GOAL_Y))) == null){
-			errorMessage.setText("Cannot build tower: You must leave the squirrels a path!");
+			errorMessage.setText("Cannot build tower: You must leave the squirrels a path");
 			errorMessage.setVisible(true);
 			mainLayer.setCell(ScreenInfo.toMapCoordinate(x), ScreenInfo.toMapCoordinate(y), oldCell);
 			return;
