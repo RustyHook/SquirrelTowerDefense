@@ -10,8 +10,11 @@
 package com.squirrel.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
 
@@ -33,6 +36,15 @@ public abstract class Tower extends Structure {
 	private Array<Projectile> projectiles;
 	private Sprite projectileSprite;
 	
+	//Animation for tower
+	private SpriteBatch batch1;
+	private TextureAtlas textureAtlas;
+	private Animation animation;
+	private float elapsedTime = 0;
+	private float x;
+	private float y;
+	private boolean isAnimated = false;
+	
 	/**
 	 * Constructs a new tower
 	 * @param sprite The sprite that will represent the tower graphically
@@ -51,6 +63,32 @@ public abstract class Tower extends Structure {
 			Array<Enemy> possibleTargets) {
 		super(sprite, x, y, cost);
 		
+		
+		this.damage = damage;
+		this.range = range;
+		this.attackRate = attackRate;
+		this.projectileSpeed = projectileSpeed;
+		this.projectileSprite = projectileSprite;
+		this.possibleTargets = possibleTargets;
+		hasTarget = false;
+		
+		projectiles = new Array<Projectile>();
+	}
+	
+	public Tower(Sprite sprite, float x, float y, int cost, float damage, float range, 
+			float attackRate, float projectileSpeed, Sprite projectileSprite, 
+			Array<Enemy> possibleTargets, String fileName) {
+		super(sprite, x, y, cost);
+		
+		this.x = x;
+		this.y = y;
+		
+		isAnimated = true;
+
+		batch1 = new SpriteBatch();
+		textureAtlas = new TextureAtlas(Gdx.files.internal(fileName));
+		animation = new Animation(1/30f, textureAtlas.getRegions());
+		
 		this.damage = damage;
 		this.range = range;
 		this.attackRate = attackRate;
@@ -67,6 +105,17 @@ public abstract class Tower extends Structure {
 		//Update the enemy based off the time between 
 		//the this frame and the last frame
 		update(Gdx.graphics.getDeltaTime(), batch);
+		
+		//For animated sprites
+		if(isAnimated){
+			batch1.begin();
+
+			elapsedTime += Gdx.graphics.getDeltaTime();
+
+			batch1.draw(animation.getKeyFrame(elapsedTime, true), x, y);
+			batch1.end();
+		}
+				
 		super.draw(batch);
 	}
 	
