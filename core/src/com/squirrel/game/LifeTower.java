@@ -17,9 +17,9 @@ public class LifeTower extends Tower {
 	static final float RANGE = 0;
 	static final float ATTACK_RATE = 0;
 	static final float PROJECTILE_SPEED = 0;
-	static final FileHandle TOWER_IMAGE = Gdx.files.internal("LifeTower.png");
+	static final FileHandle TOWER_IMAGE = Gdx.files.internal("lifeTower1.png");
 	static final FileHandle PROJECTILE_IMAGE = Gdx.files.internal("Projectile.png");
-	static final String FILE_NAME = "standardTower.atlas";
+	static final String FILE_NAME = "lifeTower1.atlas";
 	
 	/**
 	 * Constructs a new basic tower

@@ -73,9 +73,11 @@ public abstract class Wave {
 					player.increaseLives();
 				}
 				player.addWood((int)(spawnedEnemies.get(i).getReward() * GameScreen.resourceMultiplier));
+				spawnedEnemies.get(i).dispose();
 				spawnedEnemies.removeIndex(i);
 			} else if (spawnedEnemies.get(i).hasReachedGoal()) {
 				player.decreaseLives();
+				spawnedEnemies.get(i).dispose();
 				spawnedEnemies.removeIndex(i);
 			} else {
 				spawnedEnemies.get(i).draw(batch);

@@ -19,9 +19,9 @@ public class BuffTower extends Tower {
 	static final float RANGE = 0;
 	static final float ATTACK_RATE = 0;
 	static final float PROJECTILE_SPEED = 0;
-	static final FileHandle TOWER_IMAGE = Gdx.files.internal("BuffTower.png");
+	static final FileHandle TOWER_IMAGE = Gdx.files.internal("buffTower1.png");
 	static final FileHandle PROJECTILE_IMAGE = Gdx.files.internal("Projectile.png");
-	static final String FILE_NAME = "standardTower.atlas";
+	static final String FILE_NAME = "buffTower1.atlas";
 	
 	/**
 	 * Constructs a new basic tower

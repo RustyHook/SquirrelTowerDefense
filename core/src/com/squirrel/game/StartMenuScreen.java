@@ -34,7 +34,8 @@ import com.badlogic.gdx.utils.Scaling;
 public class StartMenuScreen implements Screen {
 
 	private Stage stage;
-	Game game;
+	private Game game;
+	static SelectBox<String> difficulty;
 	
 	public StartMenuScreen(Game game) {
 		this.game = game;
@@ -80,23 +81,19 @@ public class StartMenuScreen implements Screen {
 		playButton.setY((stage.getHeight()-playButton.getHeight())/2);
 		table.addActor(playButton);
 
-		/*
 	    //Creates a SelectBox that displays the Array.
 	    String[] array = new String[3];
-	    array[0] = "ZERO";
-	    array[1] = "ONE";
-	    array[2] = "TWO";
+	    array[0] = "Normal (100 Lives)";
+	    array[1] = "Hard (20 Lives)";
+	    array[2] = "Vincent (1 Life)";
 
-	    Skin skin = new Skin(Gdx.files.internal("defaultskin.json"));
+	    difficulty = new SelectBox<String>(skin);
+	    difficulty.sizeBy(150, 5);
+	    difficulty.setItems(array);
+	    difficulty.setX((stage.getWidth()-difficulty.getWidth())/2);
+	    difficulty.setY(playButton.getY() - difficulty.getHeight() - 10);
+	    table.addActor(difficulty);
 
-	    SelectBox<String> selectBox = new SelectBox<String>(skin);
-	    selectBox.setX(200);
-	    selectBox.setY(200);
-	    selectBox.setItems(array);
-	    selectBox.sizeBy(50);
-	    stage.addActor(selectBox);
-	    */
-	    
 	    //Give the button a listener!
 	    playButton.addListener(new ClickListener() {
 	    	public void clicked(InputEvent event, float x, float y) {
@@ -121,6 +118,7 @@ public class StartMenuScreen implements Screen {
 
 	public void dispose() {
 	    stage.dispose();
+
 	}
 	
 	@Override

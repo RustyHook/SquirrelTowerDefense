@@ -13,13 +13,13 @@ import com.badlogic.gdx.utils.Array;
 public class MaxTower extends Tower {
 	//Change these values for balancing
 	static final int COST = 500;
-	static final float DAMAGE = 99;
-	static final float RANGE = 999;
-	static final float ATTACK_RATE = 99;
+	static final float DAMAGE = 40;
+	static final float RANGE = 300;
+	static final float ATTACK_RATE = 1;
 	static final float PROJECTILE_SPEED = 150*4;
-	static final FileHandle TOWER_IMAGE = Gdx.files.internal("MaxTower.png");
+	static final FileHandle TOWER_IMAGE = Gdx.files.internal("maxTower1.png");
 	static final FileHandle PROJECTILE_IMAGE = Gdx.files.internal("Projectile.png");
-	static final String FILE_NAME = "standardTower.atlas";
+	static final String FILE_NAME = "maxTower1.atlas";
 	
 	/**
 	 * Constructs a new basic tower

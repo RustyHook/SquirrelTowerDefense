@@ -123,4 +123,8 @@ public class Projectile extends Sprite implements Movable {
 	public void setTarget(Enemy target) {
 		this.target = target;
 	}
+	
+//	public void dispose() {
+//		getTexture().dispose();
+//	}
 }

@@ -14,6 +14,7 @@ package com.squirrel.game;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -44,10 +45,10 @@ public class GameScreen implements Screen {
 	static final int SPAWN_Y = ScreenInfo.HEIGHT / 2 - ScreenInfo.TILE_SIZE;
 	static final int GOAL_X = ScreenInfo.WIDTH - 2 * ScreenInfo.TILE_SIZE; 
 	static final int GOAL_Y = ScreenInfo.HEIGHT / 2;
-	static final int DIFFICULTY_MODIFIER = 1;
 	static double damageMultiplier = 1;
 	static double resourceMultiplier = 1;
 	static int lifeTowers = 0;
+	static int difficulty  = 100;
 	
 	//Instance fields
 	SpriteBatch batch;
@@ -74,13 +75,11 @@ public class GameScreen implements Screen {
 	TextButton nextButton;
 	String[] structureList = {"Stick Tower (15)", 
 			"Buff Tower (35)", 
-			"Life Tower (50)", 
+			"Life Tower (75)", 
 			"Resource Tower (75)", 
 			"Stick Trap (5)",  
 			"Professor Max (500)"};
 
-	TextButton deleteButton;
-	
 	Array<Enemy> enemies;
 	Array<Tower> towers;
 	Array<Trap> traps;
@@ -92,10 +91,36 @@ public class GameScreen implements Screen {
 	Label stoneDisplay, woodDisplay, lifeDisplay, errorMessage, waveOutput;
 	Vector2 spawn;
 	Vector2 goal;
+<<<<<<< HEAD
+
+
+	TextButton deleteTowerButton;
+	TextButton deleteTrapButton;
+	Tower selectedTower;
+	Trap selectedTrap;
+=======
 	Structure selectedStructure;
+	Tower selectedTower;
+	Trap selectedTrap;
+	TextButton deleteTowerButton;
+	TextButton deleteTrapButton;
+
+>>>>>>> 479d38aff2aea51cfefe45a039eb24b677da9dc6
+	
+	Sound waveAudio;
+	Sound needMoreAudio;
 	
 	public GameScreen(Game game) {
 		this.game = game;
+		if(StartMenuScreen.difficulty.getSelection().toString().equals("{Normal (100 Lives)}")){
+			difficulty  = 100;
+		}
+		else if(StartMenuScreen.difficulty.getSelection().toString().equals("{Hard (20 Lives)}")){
+			difficulty  = 20;
+		}
+		else if(StartMenuScreen.difficulty.getSelection().toString().equals("{Vincent (1 Life)}")){
+			difficulty  = 1;
+		}
 		show();
 	}
 
@@ -113,7 +138,15 @@ public class GameScreen implements Screen {
 		projectileImage = new Texture(Gdx.files.internal("Projectile.png"));
 		trapImage = new Texture(Gdx.files.internal("Trap.png"));
 		mapImage = new Texture(Gdx.files.internal("level1final.png"));
+	    
+	    //Setup audio
+//	    waveAudio = Gdx.audio.newSound(Gdx.files.internal("waveClip.wav"));
+//	    needMoreAudio = Gdx.audio.newSound(Gdx.files.internal("resourcesClip.wav"));
 		
+	    //Setup audio
+//	    waveAudio = Gdx.audio.newSound(Gdx.files.internal("waveClip.wav"));
+//	    needMoreAudio = Gdx.audio.newSound(Gdx.files.internal("resourcesClip.wav"));
+	    
 		//Setup camera, will be static for this game
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, ScreenInfo.WIDTH, ScreenInfo.HEIGHT);
@@ -164,47 +197,90 @@ public class GameScreen implements Screen {
 	    			waveInProgress = true;
 	    			enemies = currentWave.getSpawnedEnemies();
 	    			errorMessage.setVisible(false);
+//	    			 waveAudio.play();
 	    		}
 	    	}
 	    });
 	    
 	    nextButton.sizeBy(20, 20);
 	    nextButton.setX(stage.getWidth()-nextButton.getWidth());
+<<<<<<< HEAD
+
+=======
 	    
 	    //Creates the "Next Wave" button
-	    deleteButton = new TextButton("Destroy Tower", skin);
-	    deleteButton.addListener(new ClickListener() {
+>>>>>>> 479d38aff2aea51cfefe45a039eb24b677da9dc6
+	    //Creates the "Delete tower" button
+	    deleteTowerButton = new TextButton("Destroy Tower", skin);
+	    deleteTowerButton.addListener(new ClickListener() {
 	    	public void clicked(InputEvent event, float x, float y) {
 	    		//Refund the player
-	    		player.addWood(selectedStructure.getCost());
+	    		player.addWood(selectedTower.getCost());
 	    		
 	    		//delete the structure from map
-	    		mainLayer.setCell(ScreenInfo.toMapCoordinate(selectedStructure.getX()), 
-	    				ScreenInfo.toMapCoordinate(selectedStructure.getY()), null);
+	    		mainLayer.setCell(ScreenInfo.toMapCoordinate(selectedTower.getX()), 
+	    				ScreenInfo.toMapCoordinate(selectedTower.getY()), null);
 	    		
 	    		//remove structure from the array of structures
 	    		for (int i = 0; i < towers.size; i++) {
-	    			if (towers.get(i).getX() == selectedStructure.getX() &&
-	    					towers.get(i).getY() == selectedStructure.getY()) {
+	    			if (towers.get(i).getX() == selectedTower.getX() &&
+	    					towers.get(i).getY() == selectedTower.getY()) {
 	    				towers.removeIndex(i);
 	    				break;
 	    			}
 	    		}
+<<<<<<< HEAD
+=======
 	    		
-	    		deleteButton.setVisible(false);
+>>>>>>> 479d38aff2aea51cfefe45a039eb24b677da9dc6
+	    		deleteTowerButton.setVisible(false);
 	    	}
 	    });
 	    
-	    deleteButton.sizeBy(20, 20);
-	    deleteButton.setX((stage.getWidth() - deleteButton.getWidth()) / 2);
-	    deleteButton.setVisible(false);
-	    
+	    deleteTowerButton.sizeBy(20, 20);
+	    deleteTowerButton.setX((stage.getWidth() - deleteTowerButton.getWidth()) / 2);
+	    deleteTowerButton.setVisible(false);
+
+	    //Creates the "Delete trap" button
+	    deleteTrapButton = new TextButton("Destroy Trap", skin);
+	    deleteTrapButton.addListener(new ClickListener() {
+	    	public void clicked(InputEvent event, float x, float y) {
+	    		//Refund the player
+	    		player.addWood(selectedTrap.getCost());
+	    		
+	    		//delete the structure from map
+	    		mainLayer.setCell(ScreenInfo.toMapCoordinate(selectedTrap.getX()), 
+	    				ScreenInfo.toMapCoordinate(selectedTrap.getY()), null);
+	    		
+	    		//remove structure from the array of structures
+	    		for (int i = 0; i < traps.size; i++) {
+	    			if (traps.get(i).getX() == selectedTrap.getX() &&
+	    					traps.get(i).getY() == selectedTrap.getY()) {
+	    				traps.removeIndex(i);
+	    				break;
+	    			}
+	    		}
+	    		
+	    		deleteTrapButton.setVisible(false);
+<<<<<<< HEAD
+	    	}
+	    });
+
+=======
+
+	    	}
+	    });
+>>>>>>> 479d38aff2aea51cfefe45a039eb24b677da9dc6
+	    deleteTrapButton.sizeBy(20, 20);
+	    deleteTrapButton.setX((stage.getWidth() - deleteTowerButton.getWidth()) / 2);
+	    deleteTrapButton.setVisible(false);
+
 	    table = new Table();
 	    table.setFillParent(true);
 	    stage.addActor(table);
 	    table.addActor(structureSelect);
 	    table.addActor(nextButton);
-	    table.addActor(deleteButton);
+<<<<<<< HEAD
 	    
 	    lifeDisplay = new Label("Lives: " + player.getLives(), skin);
 	    lifeDisplay.setX((stage.getWidth() - lifeDisplay.getWidth())/2);
@@ -215,7 +291,16 @@ public class GameScreen implements Screen {
 	    woodDisplay.setX((stage.getWidth() - woodDisplay.getWidth())/2);
 	    woodDisplay.setY((lifeDisplay.getY() - woodDisplay.getHeight()));
 	    table.addActor(woodDisplay);
-	    
+
+	    table.addActor(deleteTowerButton);
+	    table.addActor(deleteTrapButton);
+
+=======
+	    table.addActor(deleteTowerButton);
+	    table.addActor(deleteTrapButton);
+
+	 
+>>>>>>> 479d38aff2aea51cfefe45a039eb24b677da9dc6
 	    /*
 	    stoneDisplay = new Label("Stone: " + player.getStone() + "", skin);
 	    stoneDisplay.setX((stage.getWidth() - stoneDisplay.getWidth())/2);
@@ -226,13 +311,26 @@ public class GameScreen implements Screen {
 	    waveOutput = new Label(waves.peek().getMessage(), skin);
 	    waveOutput.setY(stage.getHeight() - waveOutput.getHeight());
 	    
+	    lifeDisplay = new Label("Lives: " + player.getLives(), skin);
+	    lifeDisplay.setY(waveOutput.getY() - lifeDisplay.getHeight());
+	    table.addActor(lifeDisplay);
+	    
+	    woodDisplay = new Label("Wood: " + player.getWood() + "", skin);
+	    woodDisplay.setY(lifeDisplay.getY() - woodDisplay.getHeight());
+	    table.addActor(woodDisplay);
+	    
+	    
 	    errorMessage = new Label("Errors Go Here", skin);
 	    errorMessage.setVisible(false);
 		
 		table.addActor(waveOutput);
 	    table.addActor(errorMessage);
-	    
-	    //Set wave one message to show
+<<<<<<< HEAD
+	    table.addActor(deleteTowerButton);
+	    table.addActor(deleteTrapButton);
+
+=======
+>>>>>>> 479d38aff2aea51cfefe45a039eb24b677da9dc6
 	}
 
 	@Override
@@ -337,11 +435,26 @@ public class GameScreen implements Screen {
 		Cell cell = mainLayer.getCell(ScreenInfo.toMapCoordinate(xPos), ScreenInfo.toMapCoordinate(yPos));
 		
 		
-		if (cell == null ||!(cell.getTile().getProperties().containsKey("blocked"))) {
+		if (cell == null || (!(cell.getTile().getProperties().containsKey("blocked")) && 
+				!(cell.getTile().getProperties().containsKey("trap")))) {
+<<<<<<< HEAD
+			//Unselect whatever was selected
+
+			//Unselect whatever was selected
+=======
+
 			//Unselect whatever was selected
 			selectedStructure = null;
-			deleteButton.setVisible(false);
+>>>>>>> 479d38aff2aea51cfefe45a039eb24b677da9dc6
+			selectedTower = null;
+			selectedTrap = null;
+			deleteTowerButton.setVisible(false);
+			deleteTrapButton.setVisible(false);
+
+<<<<<<< HEAD
+=======
 			
+>>>>>>> 479d38aff2aea51cfefe45a039eb24b677da9dc6
 			String structureChosen = structureSelect.getSelected();
 			float structX = ScreenInfo.toMapCoordinate(xPos) * ScreenInfo.TILE_SIZE;
 			float structY = ScreenInfo.toMapCoordinate(yPos) * ScreenInfo.TILE_SIZE;		
@@ -356,7 +469,7 @@ public class GameScreen implements Screen {
 			case "Resource Tower ("+ResourceTower.COST+")": spawnTower(xPos, yPos, new ResourceTower(structX, structY, enemies));
 				String[] update =  {"Stick Tower (15)", 
 						"Buff Tower (35)", 
-						"Life Tower (50)", 
+						"Life Tower (75)", 
 						"Stick Trap (5)",  
 						"Professor Max (500)"};
 			structureList = update;
@@ -369,10 +482,23 @@ public class GameScreen implements Screen {
 				break;
 		}
 
-			//TODO WHAT IF PLAYER WANTS TO UPGRADE OR DELETE??	
-		} else if (cell.getTile().getProperties().containsKey("structure")) {	
-			selectedStructure = (Structure) cell.getTile().getProperties().get("structure");
-			deleteButton.setVisible(true);
+			//TODO WHAT IF PLAYER WANTS TO UPGRADE??
+		} else if (cell.getTile().getProperties().containsKey("tower")) {	
+<<<<<<< HEAD
+			errorMessage.setText("Tower selected");
+			errorMessage.setVisible(true);
+=======
+>>>>>>> 479d38aff2aea51cfefe45a039eb24b677da9dc6
+			selectedTower = (Tower) cell.getTile().getProperties().get("tower");
+			deleteTrapButton.setVisible(false);
+			deleteTowerButton.setVisible(true);
+		} else if (cell.getTile().getProperties().containsKey("trap")) {
+			errorMessage.setText("Trap selected");
+			errorMessage.setVisible(true);
+			selectedTrap = (Trap) cell.getTile().getProperties().get("trap");
+			deleteTowerButton.setVisible(false);
+			deleteTrapButton.setVisible(true);
+
 		}
 	}
 	
@@ -390,7 +516,7 @@ public class GameScreen implements Screen {
 		TextureRegion region = new TextureRegion(tower.getTexture());
 		StaticTiledMapTile newTile = new StaticTiledMapTile(region);
 		newTile.getProperties().put("blocked", true);
-		newTile.getProperties().put("structure", tower);
+		newTile.getProperties().put("tower", tower);
 		newCell.setTile(newTile);
 		mainLayer.setCell(ScreenInfo.toMapCoordinate(x), ScreenInfo.toMapCoordinate(y), newCell);
 
@@ -403,6 +529,7 @@ public class GameScreen implements Screen {
 		if(player.getWood() < tower.getCost()){
 			errorMessage.setText("Insufficient Wood: Cannot Build Tower");
 			errorMessage.setVisible(true);
+//			needMoreAudio.play();
 			mainLayer.setCell(ScreenInfo.toMapCoordinate(x), ScreenInfo.toMapCoordinate(y), oldCell);
 		}
 
@@ -436,6 +563,7 @@ public class GameScreen implements Screen {
 		if (player.getWood() < trap.getCost()) {
 			errorMessage.setText("Insufficient Wood: Cannot Build Trap");
 			errorMessage.setVisible(true);
+//			needMoreAudio.play();
 			return;
 		}
 		else if(cell != null && cell.getTile().getProperties().containsKey("trap")){
