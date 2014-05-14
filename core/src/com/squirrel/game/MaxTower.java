@@ -19,7 +19,7 @@ public class MaxTower extends Tower {
 	static final float PROJECTILE_SPEED = 150*4;
 	static final FileHandle TOWER_IMAGE = Gdx.files.internal("MaxTower.png");
 	static final FileHandle PROJECTILE_IMAGE = Gdx.files.internal("Projectile.png");
-	static final String FILE_NAME = "standardTower.atlas";
+	static final String FILE_NAME = "maxTower1.atlas";
 	
 	/**
 	 * Constructs a new basic tower

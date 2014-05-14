@@ -49,6 +49,7 @@ public class GameScreen implements Screen {
 	static double resourceMultiplier = 1;
 	static int lifeTowers = 0;
 	static int difficulty  = 100;
+	static boolean hasWon = false;
 	
 	//Instance fields
 	SpriteBatch batch;
@@ -114,6 +115,28 @@ public class GameScreen implements Screen {
 		else if(StartMenuScreen.difficulty.getSelection().toString().equals("{Vincent (1 Life)}")){
 			difficulty  = 1;
 		}
+		damageMultiplier = 1;
+		resourceMultiplier = 1;
+		lifeTowers = 0;
+		hasWon = false;
+		show();
+	}
+	
+	public GameScreen(Game game, boolean replay) {
+		this.game = game;
+		if(EndScreen.difficulty.getSelection().toString().equals("{Normal (100 Lives)}")){
+			difficulty  = 100;
+		}
+		else if(EndScreen.difficulty.getSelection().toString().equals("{Hard (20 Lives)}")){
+			difficulty  = 20;
+		}
+		else if(EndScreen.difficulty.getSelection().toString().equals("{Vincent (1 Life)}")){
+			difficulty  = 1;
+		}
+		damageMultiplier = 1;
+		resourceMultiplier = 1;
+		lifeTowers = 0;
+		hasWon = false;
 		show();
 	}
 
@@ -300,16 +323,18 @@ public class GameScreen implements Screen {
 		if (waveInProgress && currentWave.isOver()) {
 			//End game if it is over
 			if (waves.size == 0) {
-				game.setScreen(new StartMenuScreen(game));
+				hasWon = true;
+				game.setScreen(new EndScreen(game));
 			} else {
 				waveInProgress = false;
-				
 				player.addWood(currentWave.getWoodReward());
 				Label temp = new Label(waves.peek().getMessage(), skin);
 				waveOutput.setText(waves.peek().getMessage());
 				waveOutput.setY(stage.getHeight() - temp.getHeight());
 				waveOutput.setVisible(true);
 			}
+		} else if (player.getLives() == 0) {
+			game.setScreen(new EndScreen(game));
 		} else if (waveInProgress) {
 			currentWave.updateMap(mainLayer);
 		}

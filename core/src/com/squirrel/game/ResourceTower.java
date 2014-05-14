@@ -20,7 +20,7 @@ public class ResourceTower extends Tower {
 	static final float PROJECTILE_SPEED = 0;
 	static final FileHandle TOWER_IMAGE = Gdx.files.internal("ResourceTower.png");
 	static final FileHandle PROJECTILE_IMAGE = Gdx.files.internal("Projectile.png");
-	static final String FILE_NAME = "standardTower.atlas";
+	static final String FILE_NAME = "resourceTower1.atlas";
 	
 	/**
 	 * Constructs a new basic tower
