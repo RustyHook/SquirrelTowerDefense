@@ -105,6 +105,9 @@ public class GameScreen implements Screen {
 	TextButton deleteTowerButton;
 	TextButton deleteTrapButton;
 
+<<<<<<< HEAD
+>>>>>>> 479d38aff2aea51cfefe45a039eb24b677da9dc6
+=======
 >>>>>>> 479d38aff2aea51cfefe45a039eb24b677da9dc6
 	
 	Sound waveAudio;
@@ -209,6 +212,9 @@ public class GameScreen implements Screen {
 =======
 	    
 	    //Creates the "Next Wave" button
+<<<<<<< HEAD
+>>>>>>> 479d38aff2aea51cfefe45a039eb24b677da9dc6
+=======
 >>>>>>> 479d38aff2aea51cfefe45a039eb24b677da9dc6
 	    //Creates the "Delete tower" button
 	    deleteTowerButton = new TextButton("Destroy Tower", skin);
@@ -232,6 +238,9 @@ public class GameScreen implements Screen {
 <<<<<<< HEAD
 =======
 	    		
+<<<<<<< HEAD
+>>>>>>> 479d38aff2aea51cfefe45a039eb24b677da9dc6
+=======
 >>>>>>> 479d38aff2aea51cfefe45a039eb24b677da9dc6
 	    		deleteTowerButton.setVisible(false);
 	    	}
@@ -263,9 +272,15 @@ public class GameScreen implements Screen {
 	    		
 	    		deleteTrapButton.setVisible(false);
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    	}
 	    });
 
+=======
+
+	    	}
+	    });
+>>>>>>> 479d38aff2aea51cfefe45a039eb24b677da9dc6
 =======
 
 	    	}
@@ -280,6 +295,7 @@ public class GameScreen implements Screen {
 	    stage.addActor(table);
 	    table.addActor(structureSelect);
 	    table.addActor(nextButton);
+<<<<<<< HEAD
 <<<<<<< HEAD
 	    
 	    lifeDisplay = new Label("Lives: " + player.getLives(), skin);
@@ -296,10 +312,15 @@ public class GameScreen implements Screen {
 	    table.addActor(deleteTrapButton);
 
 =======
+=======
+>>>>>>> 479d38aff2aea51cfefe45a039eb24b677da9dc6
 	    table.addActor(deleteTowerButton);
 	    table.addActor(deleteTrapButton);
 
 	 
+<<<<<<< HEAD
+>>>>>>> 479d38aff2aea51cfefe45a039eb24b677da9dc6
+=======
 >>>>>>> 479d38aff2aea51cfefe45a039eb24b677da9dc6
 	    /*
 	    stoneDisplay = new Label("Stone: " + player.getStone() + "", skin);
@@ -326,9 +347,12 @@ public class GameScreen implements Screen {
 		table.addActor(waveOutput);
 	    table.addActor(errorMessage);
 <<<<<<< HEAD
+<<<<<<< HEAD
 	    table.addActor(deleteTowerButton);
 	    table.addActor(deleteTrapButton);
 
+=======
+>>>>>>> 479d38aff2aea51cfefe45a039eb24b677da9dc6
 =======
 >>>>>>> 479d38aff2aea51cfefe45a039eb24b677da9dc6
 	}
@@ -438,9 +462,15 @@ public class GameScreen implements Screen {
 		if (cell == null || (!(cell.getTile().getProperties().containsKey("blocked")) && 
 				!(cell.getTile().getProperties().containsKey("trap")))) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 			//Unselect whatever was selected
 
 			//Unselect whatever was selected
+=======
+
+			//Unselect whatever was selected
+			selectedStructure = null;
+>>>>>>> 479d38aff2aea51cfefe45a039eb24b677da9dc6
 =======
 
 			//Unselect whatever was selected
@@ -452,7 +482,10 @@ public class GameScreen implements Screen {
 			deleteTrapButton.setVisible(false);
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
+=======
+>>>>>>> 479d38aff2aea51cfefe45a039eb24b677da9dc6
 			
 >>>>>>> 479d38aff2aea51cfefe45a039eb24b677da9dc6
 			String structureChosen = structureSelect.getSelected();
@@ -485,8 +518,11 @@ public class GameScreen implements Screen {
 			//TODO WHAT IF PLAYER WANTS TO UPGRADE??
 		} else if (cell.getTile().getProperties().containsKey("tower")) {	
 <<<<<<< HEAD
+<<<<<<< HEAD
 			errorMessage.setText("Tower selected");
 			errorMessage.setVisible(true);
+=======
+>>>>>>> 479d38aff2aea51cfefe45a039eb24b677da9dc6
 =======
 >>>>>>> 479d38aff2aea51cfefe45a039eb24b677da9dc6
 			selectedTower = (Tower) cell.getTile().getProperties().get("tower");
