@@ -71,8 +71,11 @@ public class StartMenuScreen implements Screen {
 		Image image = new Image(background);
 		image.setWidth(800);
 		image.setHeight(480);
+		
+		
 
 		table.addActor(image);
+		
 
 		
 		TextButton playButton = new TextButton("Play", skin);
@@ -80,6 +83,14 @@ public class StartMenuScreen implements Screen {
 		playButton.setX((stage.getWidth()-playButton.getWidth())/2);	//Centers the button
 		playButton.setY((stage.getHeight()-playButton.getHeight())/2);
 		table.addActor(playButton);
+		
+		TextureRegion title = new TextureRegion(new Texture(Gdx.files.internal("title.png")));
+		Image titleImage = new Image(title);
+		titleImage.setX((stage.getWidth()-titleImage.getWidth())/2);
+		titleImage.setY(playButton.getY() + titleImage.getHeight() - 30);
+		//titleImage.setWidth(400);
+		//titleImage.setHeight(200);
+		table.addActor(titleImage);
 
 	    //Creates a SelectBox that displays the Array.
 	    String[] array = new String[3];

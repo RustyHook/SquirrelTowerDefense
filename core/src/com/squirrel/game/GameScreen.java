@@ -31,6 +31,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -57,6 +58,7 @@ public class GameScreen implements Screen {
 	Texture stickImage;
 	Texture towerImage;
 	Texture projectileImage;
+	
 	OrthographicCamera camera;
 	TiledMap map;
 	private OrthogonalTiledMapRenderer renderer;
@@ -68,6 +70,8 @@ public class GameScreen implements Screen {
 	Stage stage;
 	Texture mapImage;
 	private Sprite mapSprite;
+	TextureRegion library;
+	Image goalImage;
 	
 	Skin skin;
 	Table table;
@@ -146,6 +150,10 @@ public class GameScreen implements Screen {
 		Gdx.input.setInputProcessor(stage);
 		batch = new SpriteBatch();
 
+	    table = new Table();
+	    table.setFillParent(true);
+	    stage.addActor(table);
+
 		//Create textures for the images 
 		squirrelImage = new Texture(Gdx.files.internal("squirrel.png"));
 		stickImage = new Texture(Gdx.files.internal("stick.gif"));
@@ -154,6 +162,8 @@ public class GameScreen implements Screen {
 		projectileImage = new Texture(Gdx.files.internal("Projectile.png"));
 		trapImage = new Texture(Gdx.files.internal("Trap.png"));
 		mapImage = new Texture(Gdx.files.internal("level1final.png"));
+		
+		
 		
 	    //Setup audio
 //	    waveAudio = Gdx.audio.newSound(Gdx.files.internal("waveClip.wav"));
@@ -176,6 +186,16 @@ public class GameScreen implements Screen {
 		mapSprite = new Sprite(mapImage);
 		mapSprite.setSize(ScreenInfo.WIDTH, ScreenInfo.HEIGHT);
 		pathFinder = new PathFinder(mainLayer);
+		
+		library = new TextureRegion(new Texture(Gdx.files.internal("library.png")));
+		goalImage = new Image(library);
+		goalImage.setHeight(50f);
+		goalImage.setWidth(50f);
+		goalImage.setX(stage.getWidth()-goalImage.getWidth());
+		goalImage.setY(stage.getHeight()/2);
+
+		table.addActor(goalImage);
+
 		
 		spawn = new Vector2(ScreenInfo.toMapCoordinate(SPAWN_X), ScreenInfo.toMapCoordinate(SPAWN_Y));
 		goal = new Vector2(ScreenInfo.toMapCoordinate(GOAL_X), ScreenInfo.toMapCoordinate(GOAL_Y));
@@ -274,9 +294,6 @@ public class GameScreen implements Screen {
 	    deleteTrapButton.setX((stage.getWidth() - deleteTowerButton.getWidth()) / 2);
 	    deleteTrapButton.setVisible(false);
 
-	    table = new Table();
-	    table.setFillParent(true);
-	    stage.addActor(table);
 	    table.addActor(structureSelect);
 	    table.addActor(nextButton);
 	    table.addActor(deleteTowerButton);
