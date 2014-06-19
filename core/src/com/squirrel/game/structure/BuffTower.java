@@ -4,17 +4,19 @@
  * 
  */
 
-package com.squirrel.game;
+package com.squirrel.game.structure;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.utils.Array;
+import com.squirrel.game.GameScreen;
+import com.squirrel.game.enemy.Enemy;
 
 public class BuffTower extends Tower {
 	//Change these values for balancing
-	static final int COST = 35;
+	public static final int COST = 35;
 	static final float DAMAGE = 0;
 	static final float RANGE = 0;
 	static final float ATTACK_RATE = 0;
@@ -33,7 +35,7 @@ public class BuffTower extends Tower {
 		super(new Sprite(new Texture(TOWER_IMAGE)), x, y, COST, DAMAGE, RANGE, 
 				ATTACK_RATE, PROJECTILE_SPEED,
 				new Sprite(new Texture(PROJECTILE_IMAGE)), possibleTargets, FILE_NAME);
-		GameScreen.damageMultiplier = (GameScreen.damageMultiplier+2)/2;
+		GameScreen.setDamageMultiplier((GameScreen.getDamageMultiplier()+2)/2);
 	}
 }
 

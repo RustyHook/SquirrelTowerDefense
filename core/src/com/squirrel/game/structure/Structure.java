@@ -5,7 +5,7 @@
  * @author Jacob Rust
  */
 
-package com.squirrel.game;
+package com.squirrel.game.structure;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 

@@ -1,11 +1,11 @@
 /**
- * This class represents a boss squirrel that is a
- * very strong enemy.
+ * This class represents a chickfila eating squirrel that 
+ * is an advanced enemy.
  * 
  * @author Jacob Rust
  */
 
-package com.squirrel.game;
+package com.squirrel.game.enemy;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
@@ -14,13 +14,13 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
-public class BossSquirrel extends Enemy {
+public class ChickfilASquirrel extends Enemy {
 	//Change these values for balancing
-	static final float SPEED = 100*2;
-	static final float HEALTH = 100;
+	static final float SPEED = 80*2;
+	static final float HEALTH = 50;
 	static final int REWARD = 5;
 	static final FileHandle IMAGE = Gdx.files.internal("squirrel.png");
-	static final String fileName = "bossSquirrel.atlas";
+	static final String fileName = "chuckfillaySquirrelSheet.atlas";
 	
 	/**
 	 * Constructs a new squirrel with a sprite, x and y coordinates, and
@@ -34,7 +34,7 @@ public class BossSquirrel extends Enemy {
 	 * @param y Y coordinate
 	 * @param squirrelPath Path the squirrel will follow in reverse order
 	 */
-	public BossSquirrel(int x, int y, Vector2 spawn, Vector2 goal, Array<Vector2> path) {
+	public ChickfilASquirrel(int x, int y,Vector2 spawn, Vector2 goal, Array<Vector2> path) {
 		super(new Sprite(new Texture(IMAGE)), x, y, HEALTH, SPEED, REWARD, spawn,
 				goal, path, fileName);
 	}

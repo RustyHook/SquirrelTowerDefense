@@ -10,6 +10,8 @@ import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.utils.Array;
+import com.squirrel.game.enemy.Enemy;
+import com.squirrel.game.structure.Tower;
 
 public class ResourceTower extends Tower {
 	//Change these values for balancing

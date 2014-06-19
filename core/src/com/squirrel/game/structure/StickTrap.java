@@ -1,16 +1,17 @@
-package com.squirrel.game;
+package com.squirrel.game.structure;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.utils.Array;
+import com.squirrel.game.enemy.Enemy;
 
 public class StickTrap extends Trap {
 
 	//Change these for balancing
 	static final float DAMAGE = 5f;
-	static final int COST = 5;
+	public static final int COST = 5;
 	static final FileHandle TRAP_IMAGE = Gdx.files.internal("Trap.png");
 	
 	public StickTrap(float x, float y, Array<Enemy> enemies) {

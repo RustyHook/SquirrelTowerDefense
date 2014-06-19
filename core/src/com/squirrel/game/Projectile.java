@@ -11,8 +11,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
+import com.squirrel.game.enemy.Enemy;
 
-public class Projectile extends Sprite implements Movable {
+public class Projectile extends Sprite {
 	private float speed;
 	private Enemy target;
 	private Vector2 velocity;

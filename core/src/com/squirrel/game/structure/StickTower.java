@@ -4,17 +4,18 @@
  * @author Jacob Rust
  */
 
-package com.squirrel.game;
+package com.squirrel.game.structure;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.utils.Array;
+import com.squirrel.game.enemy.Enemy;
 
 public class StickTower extends Tower {
 	//Change these values for balancing
-	static final int COST = 15;
+	public static final int COST = 15;
 	static final float DAMAGE = 2;
 	static final float RANGE = 200;
 	static final float ATTACK_RATE = 1;

@@ -1,28 +1,26 @@
 /**
- * This class represents a basic squirrel that is an enemy
+ * This class represents a boss squirrel that is a
+ * very strong enemy.
  * 
  * @author Jacob Rust
  */
 
-package com.squirrel.game;
+package com.squirrel.game.enemy;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
-public class Squirrel extends Enemy {
+public class BossSquirrel extends Enemy {
 	//Change these values for balancing
-	static final float SPEED = 60*2;
-	static final float HEALTH = 10;
-	static final int REWARD = 2;
+	static final float SPEED = 100*2;
+	static final float HEALTH = 100;
+	static final int REWARD = 5;
 	static final FileHandle IMAGE = Gdx.files.internal("squirrel.png");
-	//Name of the atlas file that contains
-	//information about the sprite sheet.
-	static final String fileName = "squirrelSheet.atlas";
+	static final String fileName = "bossSquirrel.atlas";
 	
 	/**
 	 * Constructs a new squirrel with a sprite, x and y coordinates, and
@@ -36,16 +34,8 @@ public class Squirrel extends Enemy {
 	 * @param y Y coordinate
 	 * @param squirrelPath Path the squirrel will follow in reverse order
 	 */
-	public Squirrel(int x, int y, Vector2 spawn, Vector2 goal, Array<Vector2> path) {
-		//super(new Sprite(new Texture(IMAGE)), x, y, HEALTH, SPEED, REWARD, goal, path)
+	public BossSquirrel(int x, int y, Vector2 spawn, Vector2 goal, Array<Vector2> path) {
 		super(new Sprite(new Texture(IMAGE)), x, y, HEALTH, SPEED, REWARD, spawn,
 				goal, path, fileName);
-	}
-	
-	//For testing
-	public String toString() {
-		String out = "";
-		out += "\nSquirrel: " + super.toString();
-		return out;
 	}
 }

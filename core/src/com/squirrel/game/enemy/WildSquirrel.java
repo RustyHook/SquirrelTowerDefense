@@ -1,11 +1,11 @@
 /**
- * This class represents an arctic squirrel that is an
- * advanced enemy.
+ * This class represents a wild squirrel that 
+ * is an easy enemy.
  * 
  * @author Jacob Rust
  */
 
-package com.squirrel.game;
+package com.squirrel.game.enemy;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
@@ -14,13 +14,13 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 
-public class ArcticSquirrel extends Enemy {
+public class WildSquirrel extends Enemy {
 	//Change these values for balancing
-	static final float SPEED = 50*2;
-	static final float HEALTH = 60;
-	static final int REWARD = 5;
+	static final float SPEED = 110*2;
+	static final float HEALTH = 10;
+	static final int REWARD = 7;
 	static final FileHandle IMAGE = Gdx.files.internal("squirrel.png");
-	static final String fileName = "arcticSquirrelSheet.atlas";
+	static final String fileName = "wildSquirrelSheet.atlas";
 	
 	/**
 	 * Constructs a new squirrel with a sprite, x and y coordinates, and
@@ -34,9 +34,8 @@ public class ArcticSquirrel extends Enemy {
 	 * @param y Y coordinate
 	 * @param squirrelPath Path the squirrel will follow in reverse order
 	 */
-	public ArcticSquirrel(int x, int y, Vector2 spawn, Vector2 goal, Array<Vector2> path) {
+	public WildSquirrel(int x, int y,Vector2 spawn, Vector2 goal, Array<Vector2> path) {
 		super(new Sprite(new Texture(IMAGE)), x, y, HEALTH, SPEED, REWARD, spawn,
 				goal, path, fileName);
 	}
-
 }

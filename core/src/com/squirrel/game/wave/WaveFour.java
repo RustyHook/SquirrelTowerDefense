@@ -4,11 +4,16 @@
  * @author Jacob Rust
  */
 
-package com.squirrel.game;
+package com.squirrel.game.wave;
 
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.squirrel.game.Player;
+import com.squirrel.game.ScreenInfo;
+import com.squirrel.game.enemy.ChickfilASquirrel;
+import com.squirrel.game.enemy.Enemy;
+import com.squirrel.game.enemy.WildSquirrel;
 
 public class WaveFour extends Wave {
 	//Change these for balancing

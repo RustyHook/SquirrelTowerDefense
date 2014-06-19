@@ -4,7 +4,7 @@
  * @author Jacob Rust
  */
 
-package com.squirrel.game;
+package com.squirrel.game.wave;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -13,6 +13,10 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
+import com.squirrel.game.GameScreen;
+import com.squirrel.game.PathFinder;
+import com.squirrel.game.Player;
+import com.squirrel.game.enemy.Enemy;
 
 public abstract class Wave {
 	static final long spawnTimer = 500000000;
@@ -72,7 +76,8 @@ public abstract class Wave {
 				if(rand > 90){
 					player.increaseLives();
 				}
-				player.addWood((int)(spawnedEnemies.get(i).getReward() * GameScreen.resourceMultiplier));
+				player.addWood((int)(spawnedEnemies.get(i).getReward() * 
+						com.squirrel.game.GameScreen.resourceMultiplier));
 				spawnedEnemies.get(i).dispose();
 				spawnedEnemies.removeIndex(i);
 			} else if (spawnedEnemies.get(i).hasReachedGoal()) {

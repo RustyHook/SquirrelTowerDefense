@@ -6,7 +6,7 @@
  * @author Jacob Rust
  */
 
-package com.squirrel.game;
+package com.squirrel.game.enemy;
 
 import java.util.Stack;
 
@@ -22,8 +22,10 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
+import com.squirrel.game.PathFinder;
+import com.squirrel.game.ScreenInfo;
 
-public abstract class Enemy extends Sprite implements Movable{
+public abstract class Enemy extends Sprite {
 	
 	//These values can be changed for balance
 	private float speed;

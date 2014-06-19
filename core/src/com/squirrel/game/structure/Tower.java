@@ -7,7 +7,7 @@
  * @author Jacob Rust
  */
 
-package com.squirrel.game;
+package com.squirrel.game.structure;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -17,6 +17,9 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
+import com.squirrel.game.GameScreen;
+import com.squirrel.game.Projectile;
+import com.squirrel.game.enemy.Enemy;
 
 public abstract class Tower extends Structure {
 
@@ -109,7 +112,7 @@ public abstract class Tower extends Structure {
 		//Update the projectiles
 		for (int i = 0; i < projectiles.size; i++) {
 			if (projectiles.get(i).reachedTarget()) {
-				target.takeDamage((int)(damage * GameScreen.damageMultiplier));
+				target.takeDamage((int)(damage * GameScreen.getDamageMultiplier()));
 //				projectiles.get(i).dispose();
 				projectiles.removeIndex(i);
 			} else {

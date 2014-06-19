@@ -1,9 +1,10 @@
-package com.squirrel.game;
+package com.squirrel.game.structure;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.utils.Array;
+import com.squirrel.game.enemy.Enemy;
 
 public abstract class Trap extends Structure {
 	

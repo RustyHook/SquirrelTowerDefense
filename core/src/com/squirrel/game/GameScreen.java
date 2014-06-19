@@ -39,6 +39,21 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.Array;
+import com.squirrel.game.enemy.Enemy;
+import com.squirrel.game.structure.BuffTower;
+import com.squirrel.game.structure.LifeTower;
+import com.squirrel.game.structure.MaxTower;
+import com.squirrel.game.structure.StickTower;
+import com.squirrel.game.structure.StickTrap;
+import com.squirrel.game.structure.Structure;
+import com.squirrel.game.structure.Tower;
+import com.squirrel.game.structure.Trap;
+import com.squirrel.game.wave.Wave;
+import com.squirrel.game.wave.WaveFive;
+import com.squirrel.game.wave.WaveFour;
+import com.squirrel.game.wave.WaveOne;
+import com.squirrel.game.wave.WaveThree;
+import com.squirrel.game.wave.WaveTwo;
 
 public class GameScreen implements Screen {
 	//The rest of the game scales off these variables
@@ -46,8 +61,8 @@ public class GameScreen implements Screen {
 	static final int SPAWN_Y = ScreenInfo.HEIGHT / 2 - ScreenInfo.TILE_SIZE;
 	static final int GOAL_X = ScreenInfo.WIDTH - 2 * ScreenInfo.TILE_SIZE; 
 	static final int GOAL_Y = ScreenInfo.HEIGHT / 2;
-	static double damageMultiplier = 1;
-	static double resourceMultiplier = 1;
+	private static double damageMultiplier = 1;
+	public static double resourceMultiplier = 1;
 	static int lifeTowers = 0;
 	static int difficulty  = 100;
 	static boolean hasWon = false;
@@ -119,7 +134,7 @@ public class GameScreen implements Screen {
 		else if(StartMenuScreen.difficulty.getSelection().toString().equals("{Vincent (1 Life)}")){
 			difficulty  = 1;
 		}
-		damageMultiplier = 1;
+		setDamageMultiplier(1);
 		resourceMultiplier = 1;
 		lifeTowers = 0;
 		hasWon = false;
@@ -137,7 +152,7 @@ public class GameScreen implements Screen {
 		else if(EndScreen.difficulty.getSelection().toString().equals("{Vincent (1 Life)}")){
 			difficulty  = 1;
 		}
-		damageMultiplier = 1;
+		setDamageMultiplier(1);
 		resourceMultiplier = 1;
 		lifeTowers = 0;
 		hasWon = false;
@@ -594,4 +609,13 @@ public class GameScreen implements Screen {
 		// TODO Auto-generated method stub
 		
 	}
+
+	public static double getDamageMultiplier() {
+		return damageMultiplier;
+	}
+
+	public static void setDamageMultiplier(double damageMultiplier) {
+		GameScreen.damageMultiplier = damageMultiplier;
+	}
+
 }
