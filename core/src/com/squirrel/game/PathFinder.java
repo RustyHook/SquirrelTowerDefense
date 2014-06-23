@@ -37,10 +37,25 @@ public class PathFinder {
 		height = mapLayer.getHeight();
 		width = mapLayer.getWidth();
 		createNodes(mapLayer);
+		closedSet = new ArrayList<Node>();
+		openSet = new ArrayList<Node>();
 		
 //		//Log for testing
 //		Gdx.app.log("height: ", ((Integer) mapLayer.getHeight()).toString());
 //		Gdx.app.log("width: ", ((Integer) mapLayer.getWidth()).toString());
+	}
+	
+	/**
+	 * Updates the map the path finder uses. This is to improve memory
+	 * when a map is constantly updated, eliminating the need to create
+	 * more path finder objects
+	 * @param mapLayer tiled map layer to find path on
+	 */
+	public void updateMap(TiledMapTileLayer mapLayer) {
+		reset();
+		height = mapLayer.getHeight();
+		width = mapLayer.getWidth();
+		createNodes(mapLayer);
 	}
 	
 	/**
@@ -274,8 +289,8 @@ public class PathFinder {
 	 * no path exists.
 	 */
 	public Array<Vector2> findShortestPath(Vector2 startPosition, Vector2 goalPosition) {
-		closedSet = new ArrayList<Node>();
-		openSet = new ArrayList<Node>();
+		closedSet.clear();
+		openSet.clear();
 		
 		//Log for testing
 //		Gdx.app.log("Start pos x: ", ((Float) startPosition.x).toString());

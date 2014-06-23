@@ -182,11 +182,11 @@ public abstract class Enemy extends Sprite {
 	 * Updates the squirrels path
 	 * @param mapLayer Layer of a map the squirrel is traveling on
 	 */
-	public void updatePath(TiledMapTileLayer mapLayer) {
+	public void updatePath(TiledMapTileLayer mapLayer, PathFinder pathFinder) {
 		Vector2 currentPosition = new Vector2 (
 				ScreenInfo.toMapCoordinate(getX()),
 				ScreenInfo.toMapCoordinate(getY()));
-		setPath(new PathFinder(mapLayer).findShortestPath(currentPosition, goal));
+		setPath(pathFinder.findShortestPath(currentPosition, goal));
 		
 		//If the next cell would be blocked, update the next position
 		Cell cell = mapLayer.getCell(ScreenInfo.toMapCoordinate(next.x),

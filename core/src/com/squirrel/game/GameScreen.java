@@ -67,59 +67,59 @@ public class GameScreen implements Screen {
 	static int difficulty  = 100;
 	static boolean hasWon = false;
 	
-	//Instance fields
+	//Textures for the images
 	SpriteBatch batch;
 	Texture squirrelImage;
 	Texture stickImage;
 	Texture towerImage;
 	Texture projectileImage;
-	
-	OrthographicCamera camera;
-	TiledMap map;
-	private OrthogonalTiledMapRenderer renderer;
-	Texture wallImage;
-	PathFinder pathFinder;
-
-	Texture trapImage;
-	Game game;
-	Stage stage;
 	Texture mapImage;
+	Texture trapImage;
+	Texture wallImage;
 	private Sprite mapSprite;
 	TextureRegion library;
 	Image goalImage;
 	
+	//For rendering and configuring the map and view
+	OrthographicCamera camera;
+	TiledMap map;
+	private OrthogonalTiledMapRenderer renderer;
+	Game game;
+	Stage stage;
+	
+	//GUI variables
 	Skin skin;
 	Table table;
-	
 	SelectBox<String> structureSelect;
-	TextButton nextButton;
 	String[] structureList = {"Stick Tower (15)", 
 			"Buff Tower (35)", 
 			"Life Tower (75)", 
 			"Resource Tower (75)", 
 			"Stick Trap (5)",  
 			"Professor Max (500)"};
-
+	Label stoneDisplay, woodDisplay, lifeDisplay, errorMessage, waveOutput;
+	TextButton deleteTowerButton;
+	TextButton deleteTrapButton;
 	TextButton deleteButton;
+	TextButton nextButton;
 	
+	//Variables for updating the game world
 	Array<Enemy> enemies;
 	Array<Tower> towers;
 	Array<Trap> traps;
 	Array<Wave> waves;
 	Wave currentWave;
 	boolean waveInProgress;
-	TiledMapTileLayer mainLayer;
 	Player player;
-	Label stoneDisplay, woodDisplay, lifeDisplay, errorMessage, waveOutput;
 	Vector2 spawn;
 	Vector2 goal;
 	Structure selectedStructure;
 	Tower selectedTower;
 	Trap selectedTrap;
-	TextButton deleteTowerButton;
-	TextButton deleteTrapButton;
+	PathFinder pathFinder;	
+	TiledMapTileLayer mainLayer;
 
-	
+	//Variables for sound
 	Sound waveAudio;
 	Sound needMoreAudio;
 	
@@ -351,6 +351,8 @@ public class GameScreen implements Screen {
 		camera.update();
 		renderer.render();
 		
+		pathFinder.updateMap(mainLayer);
+		
 		//Determine if wave is over
 		if (waveInProgress && currentWave.isOver()) {
 			//End game if it is over
@@ -373,7 +375,7 @@ public class GameScreen implements Screen {
 		
 		//Update enemy paths
 		for (Enemy e : enemies) {
-			e.updatePath(mainLayer);
+			e.updatePath(mainLayer, pathFinder);
 		}
 		
 		/*
@@ -518,7 +520,7 @@ public class GameScreen implements Screen {
 
 		//Check if this will block the path
 		//Update pathFinder with the map layer
-		pathFinder = new PathFinder(mainLayer);
+		pathFinder.updateMap(mainLayer);
 		
 		//If not enough resources OR
 		//If no path exists to the goal, do not build the tower.
