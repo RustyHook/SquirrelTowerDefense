@@ -8,16 +8,11 @@
 
 package com.squirrel.game.enemy;
 
-import java.util.Stack;
-
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.math.Vector2;
@@ -27,60 +22,24 @@ import com.squirrel.game.ScreenInfo;
 
 public abstract class Enemy extends Sprite {
 	
-	//These values can be changed for balance
+	//These values should be changed in the base classes
 	private float speed;
 	private float health;
 	private int reward;
 	
-	//Don't change these 
+	//These should not be changed for balance
 	private Vector2 velocity;
-	private Stack<Vector2> path;
+	private Array<Vector2> path;
 	private Vector2 next;
 	private boolean reachedGoal;
 	private boolean dead;
 	private Vector2 goal;
-	private Vector2 spawn;
-	
+
 	//For animation
 	private TextureAtlas textureAtlas;
 	private Animation animation;
 	private float elapsedTime = 0;
 	
-	/**
-	 * Constructs a new enemy with a sprite, x and y coordinates, and
-	 * a path to follow. The path will be traveled in the reverse of the 
-	 * order that it is passed in.  
-	 * PRECONDITIONS: The x and y coordinates should be within the map the 
-	 * enemy will be drawn to. The path should contain vectors that are
-	 * in the map as well. If not, an exception will be thrown
-	 * @param sprite Sprite representing the enemy
-	 * @param x X coordinate
-	 * @param y Y coordinate
-	 * @param path Path the enemy will follow in reverse order
-	 */
-//	public Enemy(Sprite sprite, int x, int y, float health, float speed, int reward,
-//			Vector2 spawn, Vector2 goal, Array<Vector2> path) {
-//		super(sprite);
-//		
-//		//Set the x and y position using the Sprite methods
-//		setX(x);
-//		setY(y);
-//		
-//		this.health = health;
-//		this.speed = speed;
-//		this.setReward(reward);
-//		this.goal = goal;
-//		this.spawn = spawn;
-//		
-//		velocity = new Vector2();
-//		this.path = new Stack<Vector2>();
-//		
-//		//Get the path ready to be traveled
-//		setPath(path);
-//		next = path.peek();
-//		reachedGoal = false;
-//	}
-
 	/**
 	 * Constructs a new enemy with a sprite, x and y coordinates, and
 	 * a path to follow. The path will be traveled in the reverse of the 
@@ -109,10 +68,9 @@ public abstract class Enemy extends Sprite {
 		this.speed = speed;
 		this.setReward(reward);
 		this.goal = goal;
-		this.spawn = spawn;
 
 		velocity = new Vector2();
-		this.path = new Stack<Vector2>();
+		this.path = new Array<Vector2>();
 
 		//Get the path ready to be traveled
 		setPath(path);
@@ -143,7 +101,7 @@ public abstract class Enemy extends Sprite {
 		
 		//Change next target position
 		if (atNext()) {
-			if (path.empty()) {
+			if (path.size == 0) {
 				reachedGoal = true;
 				return;
 			} else {
@@ -192,9 +150,16 @@ public abstract class Enemy extends Sprite {
 		Cell cell = mapLayer.getCell(ScreenInfo.toMapCoordinate(next.x),
 				ScreenInfo.toMapCoordinate(next.y));
 		if (cell != null && (cell.getTile()
-				.getProperties().containsKey("blocked")) && path.size() > 0) {
+				.getProperties().containsKey("blocked")) && path.size > 0) {
 			next = path.peek();
 		}
+	}
+	
+	/**
+	 * Updates the squirrels path
+	 */
+	public void updatePath(Array<Vector2> path) {
+		this.path = path;
 	}
 	
 	/**
@@ -233,14 +198,10 @@ public abstract class Enemy extends Sprite {
 	 * @param newPath Path to be traveled
 	 */
 	public void setPath(Array<Vector2> newPath) {
-		if (newPath == null) {
-			//Gdx.app.log("Enemy: ", "Path is null...");
+		if (newPath != null) {
+			path = newPath;
 		} else {
-			//Store the path in a stack
-			path = new Stack<Vector2>();
-			
-			for (Vector2 v : newPath)
-				path.push(v);
+			//Gdx.app.log("Enemy: ", "Path is null...");
 		}
 	}
 

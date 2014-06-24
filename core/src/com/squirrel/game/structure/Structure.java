@@ -45,7 +45,7 @@ public abstract class Structure extends Sprite {
 		this.cost = cost;
 	}
 
-	
-	
-
+	public void dispose() {
+		getTexture().dispose();
+	}
 }

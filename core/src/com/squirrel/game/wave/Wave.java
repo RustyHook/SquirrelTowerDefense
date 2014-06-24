@@ -6,14 +6,11 @@
 
 package com.squirrel.game.wave;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
-import com.squirrel.game.GameScreen;
 import com.squirrel.game.PathFinder;
 import com.squirrel.game.Player;
 import com.squirrel.game.enemy.Enemy;
@@ -32,6 +29,8 @@ public abstract class Wave {
 	private Vector2 goal;
 	private Array<Vector2> path;
 	private Player player;
+	private PathFinder pathFinder;
+	private TiledMapTileLayer mapLayer;
 	
 	/**
 	 * Constructs a new wave of enemies 
@@ -50,8 +49,9 @@ public abstract class Wave {
 		this.spawn = spawn;
 		this.goal = goal;
 		this.player = player;
-		
-		setPath(new PathFinder(mapLayer).findShortestPath(spawn, goal));
+		this.mapLayer = mapLayer;
+		pathFinder = new PathFinder(mapLayer);
+		setPath(pathFinder.findShortestPath(spawn, goal));
 		spawnedEnemies = new Array<Enemy>();
 	}
 	
@@ -70,8 +70,7 @@ public abstract class Wave {
 		
 		//Draw spawned enemies and remove ones that are done
 		for (int i = 0; i < spawnedEnemies.size; i++) {
-			if (spawnedEnemies.get(i).isDead()) {
-				
+			if (spawnedEnemies.get(i).isDead()) {	
 				int rand = (int)((Math.random() * 100) + 1);
 				if(rand > 90){
 					player.increaseLives();
@@ -94,9 +93,19 @@ public abstract class Wave {
 	 * Spawns a new enemy and adds it to the wave
 	 */
 	private void spawnNewEnemy() {
-		if (!(enemies.size < 1))
+		if (!(enemies.size < 1)){
+			enemies.peek().updatePath(mapLayer, pathFinder);
 			spawnedEnemies.add(enemies.pop());
+		}
 		lastSpawnTime = TimeUtils.nanoTime();
+	}
+	
+	/**
+	 * Update the enemies' paths
+	 */
+	public void updateEnemyPaths() {
+		for (Enemy e : spawnedEnemies) 
+			e.updatePath(mapLayer, pathFinder);
 	}
 	
 	public Array<Enemy> getSpawnedEnemies() {
@@ -107,8 +116,13 @@ public abstract class Wave {
 		return enemies.size == 0 && spawnedEnemies.size == 0;
 	}
 	
+	/**
+	 * Updates the map the wave is playing on.
+	 * @param mapLayer
+	 */
 	public void updateMap(TiledMapTileLayer mapLayer) {
-		setPath(new PathFinder(mapLayer).findShortestPath(spawn, goal));
+		this.mapLayer = mapLayer;
+		pathFinder.updateMap(mapLayer);
 	}
 	
 	/**

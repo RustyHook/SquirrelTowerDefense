@@ -164,7 +164,6 @@ public class GameScreen implements Screen {
 		stage = new Stage();
 		Gdx.input.setInputProcessor(stage);
 		batch = new SpriteBatch();
-
 	    table = new Table();
 	    table.setFillParent(true);
 	    stage.addActor(table);
@@ -178,8 +177,6 @@ public class GameScreen implements Screen {
 		trapImage = new Texture(Gdx.files.internal("Trap.png"));
 		mapImage = new Texture(Gdx.files.internal("level1final.png"));
 		
-		
-		
 	    //Setup audio
 //	    waveAudio = Gdx.audio.newSound(Gdx.files.internal("waveClip.wav"));
 //	    needMoreAudio = Gdx.audio.newSound(Gdx.files.internal("resourcesClip.wav"));
@@ -188,32 +185,22 @@ public class GameScreen implements Screen {
 		camera = new OrthographicCamera();
 		camera.setToOrtho(false, ScreenInfo.WIDTH, ScreenInfo.HEIGHT);
 		
-		//Lists to hold objects that are created  
+		//Lists to hold game objects that are created and updated in main loop  
 		waves = new Array<Wave>();
 		traps = new Array<Trap>();
 		towers = new Array<Tower>();
 		enemies = new Array<Enemy>();
+		
 		player = new Player();
 		
 		//Create default map stuff
 		map = new TmxMapLoader().load("level1final.tmx");
 		mainLayer = (TiledMapTileLayer) map.getLayers().get(0);
+		spawn = new Vector2(ScreenInfo.toMapCoordinate(SPAWN_X), ScreenInfo.toMapCoordinate(SPAWN_Y));
+		goal = new Vector2(ScreenInfo.toMapCoordinate(GOAL_X), ScreenInfo.toMapCoordinate(GOAL_Y));
 		mapSprite = new Sprite(mapImage);
 		mapSprite.setSize(ScreenInfo.WIDTH, ScreenInfo.HEIGHT);
 		pathFinder = new PathFinder(mainLayer);
-		
-		library = new TextureRegion(new Texture(Gdx.files.internal("library.png")));
-		goalImage = new Image(library);
-		goalImage.setHeight(50f);
-		goalImage.setWidth(50f);
-		goalImage.setX(stage.getWidth()-goalImage.getWidth());
-		goalImage.setY(stage.getHeight()/2);
-
-		table.addActor(goalImage);
-
-		
-		spawn = new Vector2(ScreenInfo.toMapCoordinate(SPAWN_X), ScreenInfo.toMapCoordinate(SPAWN_Y));
-		goal = new Vector2(ScreenInfo.toMapCoordinate(GOAL_X), ScreenInfo.toMapCoordinate(GOAL_Y));
 		
 		//Add each wave to the array of waves, reverse order
 		waves.add(new WaveFive(mainLayer, player, spawn, goal));
@@ -223,6 +210,14 @@ public class GameScreen implements Screen {
 		waves.add(new WaveOne(mainLayer, player, spawn, goal));
 		waveInProgress = false;
 		
+		//Setup the library (the goal)
+		library = new TextureRegion(new Texture(Gdx.files.internal("library.png")));
+		goalImage = new Image(library);
+		goalImage.setHeight(50f);
+		goalImage.setWidth(50f);
+		goalImage.setX(stage.getWidth()-goalImage.getWidth());
+		goalImage.setY(stage.getHeight()/2);
+
 		//Setup the renderer
 		renderer = new OrthogonalTiledMapRenderer(map);
 		renderer.setView(camera);
@@ -241,6 +236,7 @@ public class GameScreen implements Screen {
 	    	public void clicked(InputEvent event, float x, float y) {
 	    		if (!waveInProgress) {
 	    			currentWave = waves.pop();
+	    			currentWave.updateMap(mainLayer);
 	    			waveInProgress = true;
 	    			enemies = currentWave.getSpawnedEnemies();
 	    			errorMessage.setVisible(false);
@@ -248,11 +244,9 @@ public class GameScreen implements Screen {
 	    		}
 	    	}
 	    });
-	    
 	    nextButton.sizeBy(20, 20);
 	    nextButton.setX(stage.getWidth()-nextButton.getWidth());
 	    
-	    //Creates the "Next Wave" button
 	    //Creates the "Delete tower" button
 	    deleteTowerButton = new TextButton("Destroy Tower", skin);
 	    deleteTowerButton.addListener(new ClickListener() {
@@ -268,6 +262,7 @@ public class GameScreen implements Screen {
 	    		for (int i = 0; i < towers.size; i++) {
 	    			if (towers.get(i).getX() == selectedTower.getX() &&
 	    					towers.get(i).getY() == selectedTower.getY()) {
+	    				towers.get(i).dispose();
 	    				towers.removeIndex(i);
 	    				break;
 	    			}
@@ -276,7 +271,6 @@ public class GameScreen implements Screen {
 	    		deleteTowerButton.setVisible(false);
 	    	}
 	    });
-	    
 	    deleteTowerButton.sizeBy(20, 20);
 	    deleteTowerButton.setX((stage.getWidth() - deleteTowerButton.getWidth()) / 2);
 	    deleteTowerButton.setVisible(false);
@@ -296,6 +290,7 @@ public class GameScreen implements Screen {
 	    		for (int i = 0; i < traps.size; i++) {
 	    			if (traps.get(i).getX() == selectedTrap.getX() &&
 	    					traps.get(i).getY() == selectedTrap.getY()) {
+	    				traps.get(i).dispose();
 	    				traps.removeIndex(i);
 	    				break;
 	    			}
@@ -308,12 +303,6 @@ public class GameScreen implements Screen {
 	    deleteTrapButton.sizeBy(20, 20);
 	    deleteTrapButton.setX((stage.getWidth() - deleteTowerButton.getWidth()) / 2);
 	    deleteTrapButton.setVisible(false);
-
-	    table.addActor(structureSelect);
-	    table.addActor(nextButton);
-	    table.addActor(deleteTowerButton);
-	    table.addActor(deleteTrapButton);
-
 	 
 	    /*
 	    stoneDisplay = new Label("Stone: " + player.getStone() + "", skin);
@@ -322,23 +311,26 @@ public class GameScreen implements Screen {
 	    table.addActor(stoneDisplay);
 	     */
 	    
+	    //Setup the text displays
 	    waveOutput = new Label(waves.peek().getMessage(), skin);
 	    waveOutput.setY(stage.getHeight() - waveOutput.getHeight());
-	    
 	    lifeDisplay = new Label("Lives: " + player.getLives(), skin);
 	    lifeDisplay.setY(waveOutput.getY() - lifeDisplay.getHeight());
-	    table.addActor(lifeDisplay);
-	    
 	    woodDisplay = new Label("Wood: " + player.getWood() + "", skin);
 	    woodDisplay.setY(lifeDisplay.getY() - woodDisplay.getHeight());
-	    table.addActor(woodDisplay);
-	    
-	    
 	    errorMessage = new Label("Errors Go Here", skin);
 	    errorMessage.setVisible(false);
 		
+	    //Add gui elements
+	    table.addActor(lifeDisplay);
+	    table.addActor(woodDisplay);
 		table.addActor(waveOutput);
 	    table.addActor(errorMessage);
+	    table.addActor(structureSelect);
+	    table.addActor(nextButton);
+	    table.addActor(deleteTowerButton);
+	    table.addActor(deleteTrapButton);
+		table.addActor(goalImage);
 	}
 
 	@Override
@@ -351,7 +343,7 @@ public class GameScreen implements Screen {
 		camera.update();
 		renderer.render();
 		
-		pathFinder.updateMap(mainLayer);
+//		pathFinder.updateMap(mainLayer);
 		
 		//Determine if wave is over
 		if (waveInProgress && currentWave.isOver()) {
@@ -369,13 +361,6 @@ public class GameScreen implements Screen {
 			}
 		} else if (player.getLives() == 0) {
 			game.setScreen(new EndScreen(game));
-		} else if (waveInProgress) {
-			currentWave.updateMap(mainLayer);
-		}
-		
-		//Update enemy paths
-		for (Enemy e : enemies) {
-			e.updatePath(mainLayer, pathFinder);
 		}
 		
 		/*
@@ -413,6 +398,7 @@ public class GameScreen implements Screen {
 			if (traps.get(i).isDestroyed()) {
 				(mainLayer).setCell(ScreenInfo.toMapCoordinate(traps.get(i).getX()),
 						ScreenInfo.toMapCoordinate(traps.get(i).getY()), null);
+				traps.get(i).dispose();
 				traps.removeIndex(i);
 			}
 		}
@@ -544,7 +530,22 @@ public class GameScreen implements Screen {
 			towers.add(tower);
 			errorMessage.setVisible(false);
 			player.decreaseWood(tower.getCost());
+			
+			//Must update the pathfinder and enemy paths because
+			//towers can block the paths
+			updatePaths();
 		}
+	}
+
+	/**
+	 * Updates the pathfinder and enemies paths
+	 */
+	public void updatePaths() {
+		if (currentWave != null) {
+			currentWave.updateMap(mainLayer);
+			currentWave.updateEnemyPaths();
+		}
+		pathFinder.updateMap(mainLayer);
 	}
 	
 	/**
