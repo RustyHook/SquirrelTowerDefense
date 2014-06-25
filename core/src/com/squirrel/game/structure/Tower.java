@@ -56,14 +56,14 @@ public abstract class Tower extends Structure {
 	 * @param projectileSpeed The speed that the projectile travels at
 	 * @param projectileSprite The sprite to represent the projectiles graphically
 	 * @param possibleTargets Enemies that are on the map that the tower could shoot at 
-	 * @param fileName Name of file that holds the sprite sheet
+	 * @param spriteSheetFileName Name of file that holds the sprite sheet
 	 */
 	public Tower(Sprite sprite, float x, float y, int cost, float damage, float range, 
 			float attackRate, float projectileSpeed, Sprite projectileSprite, 
-			Array<Enemy> possibleTargets, String fileName) {
+			Array<Enemy> possibleTargets, String spriteSheetFileName) {
 		super(sprite, x, y, cost);
 
-		textureAtlas = new TextureAtlas(Gdx.files.internal(fileName));
+		textureAtlas = new TextureAtlas(Gdx.files.internal(spriteSheetFileName));
 		animation = new Animation(1/30f, textureAtlas.getRegions());
 		
 		this.damage = damage;

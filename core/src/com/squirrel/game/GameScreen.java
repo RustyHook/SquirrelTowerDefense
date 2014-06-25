@@ -43,6 +43,7 @@ import com.squirrel.game.enemy.Enemy;
 import com.squirrel.game.structure.BuffTower;
 import com.squirrel.game.structure.LifeTower;
 import com.squirrel.game.structure.MaxTower;
+import com.squirrel.game.structure.ResourceTower;
 import com.squirrel.game.structure.StickTower;
 import com.squirrel.game.structure.StickTrap;
 import com.squirrel.game.structure.Structure;
