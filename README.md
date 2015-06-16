@@ -1,8 +1,7 @@
 SquirrelTowerDefense
 ====================
 
-This is a multiplatform video game that started as a project for CMSC 331 (Programming Languages) at 
-University of Maryland, Baltimore County. Our group consisted of Jacob Rust, Vincent Liu, and Bryan Jarrell. 
+This is a multiplatform video game that started as a group project for our Programming Languages class.
 
 A description of the game can be found at: http://jacobrust.github.io/SquirrelTowerDefense
 
